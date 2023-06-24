@@ -21,6 +21,7 @@ class Model {
   void ConversionByDesaturation();  // ????
   void Negative();
   void Convolution(const std::string &convolution_name);
+  void SobelFilterCombin();
 
  private:
   std::vector<std::vector<EasyBMP::RGBApixel>> img_matrix_;

@@ -10,7 +10,9 @@ int main() {
   s21::Model model;
   try {
     model.ReadImg("../Images/Lena.bmp");
-    model.Convolution("box_blur");
+    // model.SobelFilterCombin();
+    model.Convolution("sobel_filter_right");
+    // model.Convolution("sobel_filter_left");
     model.WriteImg("output.bmp");
   } catch (...) {
     std::cout << "Не удалось открыть файл\n";
