@@ -1,19 +1,20 @@
 #include <chrono>
 
+#include "Controler/Controler.h"
 #include "Model/Model.h"
 
 using namespace std::chrono;
 
 int main() {
   auto t0 = high_resolution_clock::now();
-
-  s21::Model model;
+  s21::Model *model = new s21::Model;
+  s21::Controler c{model};
   try {
-    model.ReadImg("../Images/Lena.bmp");
+    c.ReadImg("../Images/Lena.bmp");
     // model.SobelFilterCombin();
-    model.Convolution("sobel_filter_right");
+    c.Convolution("sobel_filter_right");
     // model.Convolution("sobel_filter_left");
-    model.WriteImg("output.bmp");
+    c.WriteImg("output.bmp");
   } catch (...) {
     std::cout << "Не удалось открыть файл\n";
   }
