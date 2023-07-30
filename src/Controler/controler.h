@@ -3,7 +3,7 @@
 
 #include <memory>
 
-#include "../Model/model.h"
+#include "../Model/Model.h"
 
 namespace s21 {
 class Controler {

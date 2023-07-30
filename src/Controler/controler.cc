@@ -1,4 +1,4 @@
-#include "controler.h"
+#include "Controler.h"
 
 void s21::Controler::ReadImg(const std::string &img_name) {
   model_->ReadImg(img_name);
@@ -6,6 +6,10 @@ void s21::Controler::ReadImg(const std::string &img_name) {
 
 void s21::Controler::WriteImg(const std::string &img_name) {
   model_->WriteImg(img_name);
+}
+
+void s21::Controler::ChannelSelection(char RGB) {
+  // model_->ChannelSelection(RGB);
 }
 
 void s21::Controler::AverageConversion() { model_->AverageConversion(); }
