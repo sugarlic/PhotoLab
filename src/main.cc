@@ -1,14 +1,13 @@
 #include <chrono>
 
-#include "Controler/controler.h"
-#include "Model/model.h"
+#include "Controler/Controler.h"
+#include "Model/Model.h"
 
 using namespace std::chrono;
 
 int main() {
   auto t0 = high_resolution_clock::now();
-
-  s21::Model* model = new s21::Model;
+  s21::Model *model = new s21::Model;
   s21::Controler c{model};
   try {
     c.ReadImg("../Images/Lena.bmp");
