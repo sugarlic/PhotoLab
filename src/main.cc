@@ -11,9 +11,8 @@ int main() {
   s21::Controler c{model};
   try {
     c.ReadImg("../Images/Lena.bmp");
-    // model.SobelFilterCombin();
-    c.Convolution("sobel_filter_right");
-    // model.Convolution("sobel_filter_left");
+    // c.Convolution("sobel_filter_right");
+    c.SobelFilterCombin();
     c.WriteImg("output.bmp");
   } catch (...) {
     std::cout << "Не удалось открыть файл\n";

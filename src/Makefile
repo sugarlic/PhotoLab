@@ -1,5 +1,5 @@
 all:
-	g++ -std=c++17 main.cc ../Libs/EasyBMP/EasyBMP.cpp Model/Model.cc Controler/Controler.cc && ./a.out
+	g++ -g -fsanitize=address -std=c++17 main.cc ../Libs/EasyBMP/EasyBMP.cpp Model/Model.cc Controler/Controler.cc && ./a.out
 	open output.bmp
 	open ../Images/Lena.bmp
 

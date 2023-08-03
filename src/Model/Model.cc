@@ -1,11 +1,14 @@
 #include "model.h"
 
+#include <fstream>
+
+#include "Model.h"
+
 void s21::Model::ReadImg(const std::string &img_name) {
   BMP img;
   img.ReadFromFile(img_name);
   int width = img.TellWidth();
   int height = img.TellHeight();
-
   std::vector<std::vector<EasyBMP::RGBApixel>> help_matrix(
       height, std::vector<EasyBMP::RGBApixel>(width));
 
@@ -34,6 +37,17 @@ void s21::Model::WriteImg(const std::string &img_name) {
     }
   }
   output_img.WriteToFile(img_name);
+}
+
+void s21::Model::ChannelSelection(int red, int green, int blue) {
+  for (size_t i = 0; i < img_matrix_.size(); i++) {
+    for (size_t j = 0; j < img_matrix_[0].size(); j++) {
+      filtered_matrix_[i][j].Red = red;
+      filtered_matrix_[i][j].Green = green;
+      filtered_matrix_[i][j].Blue = blue;
+    }
+  }
+  img_matrix_ = filtered_matrix_;
 }
 
 // Simple Filtrs
@@ -95,7 +109,6 @@ void s21::Model::Negative() {
       filtered_matrix_[i][j].Blue = 255 - img_matrix_[i][j].Blue;
     }
   }
-  img_matrix_ = filtered_matrix_;
 }
 
 // Convolution
@@ -143,9 +156,9 @@ void s21::Model::SobelFilterCombin() {
       std::vector<EasyBMP::RGBApixel>(img_matrix_[0].size()));
 
   std::vector<std::vector<double>> left_kernel =
-      (*kernel_map_.find("sobel_filter_left")).second;
+      (*kernel_map_.find("Sobel filter left")).second;
   std::vector<std::vector<double>> right_kernel =
-      (*kernel_map_.find("sobel_filter_right")).second;
+      (*kernel_map_.find("Sobel filter right")).second;
 
   MatrixTransformation(img_matrix_, sobel_filter_left, left_kernel);
   MatrixTransformation(img_matrix_, sobel_filter_right, right_kernel);
@@ -158,7 +171,6 @@ void s21::Model::SobelFilterCombin() {
           sobel_filter_left[i][j].Green + sobel_filter_right[i][j].Green;
       filtered_matrix_[i][j].Blue =
           sobel_filter_left[i][j].Blue + sobel_filter_right[i][j].Blue;
-      ;
     }
   }
   img_matrix_ = filtered_matrix_;
