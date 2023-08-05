@@ -11,14 +11,13 @@ class Controler {
   Controler(s21::Model *model) : model_{model} {};
   void ReadImg(const std::string &img_name);
   void WriteImg(const std::string &img_name);
-  void ChannelSelection(int red, int green, int blue);
+  void ChannelSelection(char RGB);
   void AverageConversion();
   void ConversionByBrightness();
   void ConversionByDesaturation();  // ????
   void Negative();
   void Convolution(const std::string &convolution_name);
   void SobelFilterCombin();
-  void ArbitraryMatrixMode(const std::vector<std::vector<double>> &matrix);
 
  private:
   std::unique_ptr<s21::Model> model_;
