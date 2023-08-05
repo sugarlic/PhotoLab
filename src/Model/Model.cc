@@ -1,8 +1,6 @@
-#include "model.h"
+#include "Model.h"
 
 #include <fstream>
-
-#include "Model.h"
 
 void s21::Model::ReadImg(const std::string &img_name) {
   BMP img;

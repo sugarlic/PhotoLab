@@ -5,3 +5,6 @@ all:
 
 lib_install:
 	git clone git@github.com:aburgh/EasyBMP.git ../Libs/EasyBMP
+
+clean: 
+	rm -rf ../Libs/EasyBMP
