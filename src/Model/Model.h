@@ -22,6 +22,7 @@ class Model {
   void Negative();
   void Convolution(const std::string &convolution_name);
   void SobelFilterCombin();
+  void ArbitraryMatrixMode(const std::vector<std::vector<double>> &matrix);
 
  private:
   std::vector<std::vector<EasyBMP::RGBApixel>> img_matrix_;

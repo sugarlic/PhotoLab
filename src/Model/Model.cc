@@ -36,7 +36,7 @@ void s21::Model::WriteImg(const std::string &img_name) {
       output_img.SetPixel(j, i, pixel);
     }
   }
-  output_img.WriteToFile(img_name);
+  if (!output_img.WriteToFile(img_name)) std::cout << "ERROR IN WRITING FILE\n";
 }
 
 void s21::Model::ChannelSelection(int red, int green, int blue) {
@@ -47,7 +47,6 @@ void s21::Model::ChannelSelection(int red, int green, int blue) {
       filtered_matrix_[i][j].Blue = blue;
     }
   }
-  img_matrix_ = filtered_matrix_;
 }
 
 // Simple Filtrs
@@ -66,7 +65,6 @@ void s21::Model::AverageConversion() {
                                     img_matrix_[i][j].Blue / 3;
     }
   }
-  img_matrix_ = filtered_matrix_;
 }
 
 void s21::Model::ConversionByBrightness() {
@@ -83,7 +81,6 @@ void s21::Model::ConversionByBrightness() {
                                     0.114 * img_matrix_[i][j].Blue;
     }
   }
-  img_matrix_ = filtered_matrix_;
 }
 
 void s21::Model::ConversionByDesaturation() {
@@ -98,7 +95,6 @@ void s21::Model::ConversionByDesaturation() {
                                    2;
     }
   }
-  img_matrix_ = filtered_matrix_;
 }
 
 void s21::Model::Negative() {
@@ -117,11 +113,15 @@ void MatrixTransformation(
     const std::vector<std::vector<EasyBMP::RGBApixel>> &img_matrix_,
     std::vector<std::vector<EasyBMP::RGBApixel>> &filtered_matrix_,
     const std::vector<std::vector<double>> &kernel) {
+  int row_right_limit{};
+  int column_right_limit{};
+  kernel.size() == 2 ? row_right_limit = 0 : row_right_limit = 1;
+  kernel[0].size() == 2 ? column_right_limit = 0 : column_right_limit = 1;
   for (int i = 1; i < img_matrix_.size() - 1; i++) {
     for (int j = 1; j < img_matrix_[i].size() - 1; j++) {
       double red = 0, green = 0, blue = 0;
-      for (int k = -1; k <= 1; k++) {
-        for (int l = -1; l <= 1; l++) {
+      for (int k = -1; k <= row_right_limit; k++) {
+        for (int l = -1; l <= column_right_limit; l++) {
           red += img_matrix_[i + k][j + l].Red * kernel[k + 1][l + 1];
           green += img_matrix_[i + k][j + l].Green * kernel[k + 1][l + 1];
           blue += img_matrix_[i + k][j + l].Blue * kernel[k + 1][l + 1];
@@ -144,10 +144,10 @@ void s21::Model::Convolution(const std::string &convolution_name) {
   std::vector<std::vector<double>> kernel =
       (*kernel_map_.find(convolution_name)).second;
   MatrixTransformation(img_matrix_, filtered_matrix_, kernel);
-  img_matrix_ = filtered_matrix_;
 }
 
 void s21::Model::SobelFilterCombin() {
+  if (img_matrix_.empty()) return;
   std::vector<std::vector<EasyBMP::RGBApixel>> sobel_filter_left(
       img_matrix_.size(),
       std::vector<EasyBMP::RGBApixel>(img_matrix_[0].size()));
@@ -173,5 +173,10 @@ void s21::Model::SobelFilterCombin() {
           sobel_filter_left[i][j].Blue + sobel_filter_right[i][j].Blue;
     }
   }
-  img_matrix_ = filtered_matrix_;
+}
+
+void s21::Model::ArbitraryMatrixMode(
+    const std::vector<std::vector<double>> &matrix) {
+  if (!img_matrix_.empty())
+    MatrixTransformation(img_matrix_, filtered_matrix_, matrix);
 }

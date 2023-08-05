@@ -18,6 +18,7 @@ class Controler {
   void Negative();
   void Convolution(const std::string &convolution_name);
   void SobelFilterCombin();
+  void ArbitraryMatrixMode(const std::vector<std::vector<double>> &matrix);
 
  private:
   std::unique_ptr<s21::Model> model_;
