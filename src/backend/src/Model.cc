@@ -4,7 +4,7 @@
 
 void s21::Model::ReadImg(const std::string &img_name) {
   BMP img;
-  img.ReadFromFile(img_name);
+  img.ReadFromFile(img_name.c_str());
   int width = img.TellWidth();
   int height = img.TellHeight();
   std::vector<std::vector<EasyBMP::RGBApixel>> help_matrix(
@@ -34,7 +34,8 @@ void s21::Model::WriteImg(const std::string &img_name) {
       output_img.SetPixel(j, i, pixel);
     }
   }
-  if (!output_img.WriteToFile(img_name)) std::cout << "ERROR IN WRITING FILE\n";
+  if (!output_img.WriteToFile(img_name.c_str()))
+    std::cout << "ERROR IN WRITING FILE\n";
 }
 
 void s21::Model::ChannelSelection(int red, int green, int blue) {

@@ -6,7 +6,7 @@
 #include <string>
 #include <vector>
 
-#include "../../Libs/EasyBMP/EasyBMP.h"
+#include "EasyBMP.h"
 
 namespace s21 {
 class Model {
