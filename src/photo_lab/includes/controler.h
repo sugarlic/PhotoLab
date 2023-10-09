@@ -8,7 +8,7 @@
 namespace s21 {
 class Controler {
  public:
-  Controler(s21::Model *model) : model_{model} {};
+  Controler(std::shared_ptr<s21::Model> model) : model_{model} {};
   void ReadImg(const std::string &img_name);
   void WriteImg(const std::string &img_name);
   void ChannelSelection(int red, int green, int blue);
@@ -21,7 +21,7 @@ class Controler {
   void ArbitraryMatrixMode(const std::vector<std::vector<double>> &matrix);
 
  private:
-  std::unique_ptr<s21::Model> model_;
+  std::shared_ptr<s21::Model> model_;
 };
 }  // namespace s21
 

@@ -49,8 +49,8 @@ b_d: build_${PROJECT_NAME}_debug
 
 dist: install
 	@cd ${BUILD_PATH}${EXE_DIR}/ && tar czf ../../src/${PROJECT_NAME}.tgz ./*
-leaks: build_debug build_${PROJECT_NAME}
-	leaks -atExit -- ./${EXE_PATH}
+leaks: build_d build_${PROJECT_NAME}
+	leaks -atExit -- ./${EXE_PATH}/Contents/MacOS/PhotoLab
 dvi:
 	@$(OPEN_CMD) dvi/index.md
 
