@@ -27,7 +27,7 @@ void MainWindow::FileReopen(const QString fname) {
   ui->label_out->setPixmap(QPixmap(fname));
   try {
     controler_->ReadImg(fname.toStdString());
-  } catch (std::__nested<std::runtime_error>) {
+  } catch (...) {
     std::cout << "Choose file";
   }
 }
@@ -47,7 +47,7 @@ void MainWindow::on_pushButton_clicked() {
   ui->label->setPixmap(QPixmap(filename_));
   try {
     controler_->ReadImg(filename_.toStdString());
-  } catch (std::__nested<std::runtime_error>) {
+  } catch (...) {
     std::cout << "Choose file";
   }
 }
