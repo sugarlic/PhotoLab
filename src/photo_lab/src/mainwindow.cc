@@ -23,15 +23,6 @@ MainWindow::~MainWindow() {
   std::filesystem::remove("output.bmp");
 }
 
-void MainWindow::FileReopen(const QString fname) {
-  ui->label_out->setPixmap(QPixmap(fname));
-  try {
-    controler_->ReadImg(fname.toStdString());
-  } catch (...) {
-    std::cout << "Choose file";
-  }
-}
-
 void MainWindow::on_pushButton_clicked() {
   QFileDialog fileDialog;
   fileDialog.setWindowTitle("Выберите директорию");
@@ -47,6 +38,7 @@ void MainWindow::on_pushButton_clicked() {
   ui->label->setPixmap(QPixmap(filename_));
   try {
     controler_->ReadImg(filename_.toStdString());
+    UpdateImage();
   } catch (...) {
     std::cout << "Choose file";
   }
@@ -58,19 +50,29 @@ void MainWindow::on_pushButton_CS_clicked() {
   QColor color = colorDialog->getColor();
   if (color.isValid()) {
     controler_->ChannelSelection(color.red(), color.green(), color.blue());
-    controler_->WriteImg("output.bmp");
-    FileReopen("output.bmp");
+
   }
 }
 
-void MainWindow::on_pushButton_Restart_clicked() { FileReopen(filename_); }
+void MainWindow::on_pushButton_Restart_clicked() {
+    controler_->Restart();
+    UpdateImage();
+}
 
 void MainWindow::on_pushButton_MM_clicked() { window_->show(); }
 
 void MainWindow::RecieveData(std::vector<std::vector<double>> matrix) {
   controler_->ArbitraryMatrixMode(matrix);
-  controler_->WriteImg("output.bmp");
-  FileReopen("output.bmp");
+  UpdateImage();
+}
+
+void MainWindow::UpdateImage()
+{
+    try{
+        ui->label_out->setPixmap(QPixmap::fromImage(controler_->WriteImg()));
+    } catch(...) {
+        return;
+    }
 }
 
 void MainWindow::on_pushButton_Save_clicked() {
@@ -130,6 +132,9 @@ void MainWindow::SetupView() {
   for (auto &but : convolution_buttons) {
     controler_btns_.push_back(but);
     ui->Convolution_btns->addWidget(but.get());
+  }
+  for (auto &but : controler_btns_) {
+    connect(but.get(), SIGNAL(clicked()), this, SLOT(UpdateImage()));
   }
 }
 

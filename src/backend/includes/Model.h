@@ -1,6 +1,8 @@
 #ifndef MODEL_H_
 #define MODEL_H_
 
+#include <qimage.h>
+
 #include <iostream>
 #include <map>
 #include <string>
@@ -14,7 +16,7 @@ class Model {
   Model(){};
   ~Model(){};
   void ReadImg(const std::string &img_name);
-  void WriteImg(const std::string &img_name);
+  QImage WriteImg();
   void ChannelSelection(int red, int green, int blue);
   void AverageConversion();
   void ConversionByBrightness();
@@ -23,6 +25,7 @@ class Model {
   void Convolution(const std::string &convolution_name);
   void SobelFilterCombin();
   void ArbitraryMatrixMode(const std::vector<std::vector<double>> &matrix);
+  void Restart();
 
  private:
   std::vector<std::vector<EasyBMP::RGBApixel>> img_matrix_;
@@ -39,6 +42,7 @@ class Model {
       {"Laplacian filter", {{-1, -1, -1}, {-1, 8, -1}, {-1, -1, -1}}},
       {"Sobel filter left", {{1, 0, -1}, {2, 0, -2}, {1, 0, -1}}},
       {"Sobel filter right", {{-1, 0, 1}, {-2, 0, 2}, {-1, 0, 1}}}};
+  QImage CreateQimage(BMP image);
 };
 }  // namespace s21
 

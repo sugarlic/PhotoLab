@@ -18,7 +18,7 @@ class CommandNegative : public CommandBase {
       : CommandBase(controler) {}
   virtual void Execute() {
     controler_->Negative();
-    controler_->WriteImg("output.bmp");
+    controler_->WriteImg();
   };
 };
 class CommandAverageConversion : public CommandBase {
@@ -27,7 +27,7 @@ class CommandAverageConversion : public CommandBase {
       : CommandBase(controler) {}
   virtual void Execute() {
     controler_->AverageConversion();
-    controler_->WriteImg("output.bmp");
+    controler_->WriteImg();
   };
 };
 class CommandConversionByBrightness : public CommandBase {
@@ -36,7 +36,7 @@ class CommandConversionByBrightness : public CommandBase {
       : CommandBase(controler) {}
   virtual void Execute() {
     controler_->ConversionByBrightness();
-    controler_->WriteImg("output.bmp");
+    controler_->WriteImg();
   };
 };
 class CommandConversionByDesaturation : public CommandBase {
@@ -45,7 +45,7 @@ class CommandConversionByDesaturation : public CommandBase {
       : CommandBase(controler) {}
   virtual void Execute() {
     controler_->ConversionByDesaturation();
-    controler_->WriteImg("output.bmp");
+    controler_->WriteImg();
   };
 };
 class CommandSobelFilterCombin : public CommandBase {
@@ -54,7 +54,7 @@ class CommandSobelFilterCombin : public CommandBase {
       : CommandBase(controler) {}
   virtual void Execute() {
     controler_->SobelFilterCombin();
-    controler_->WriteImg("output.bmp");
+    controler_->WriteImg();
   };
 };
 class CommandConvolution : public CommandBase {
@@ -64,7 +64,7 @@ class CommandConvolution : public CommandBase {
       : CommandBase(controler), convolution_name_(convolution_name) {}
   virtual void Execute() {
     controler_->Convolution(convolution_name_);
-    controler_->WriteImg("output.bmp");
+    controler_->WriteImg();
   };
 
  private:
@@ -78,7 +78,7 @@ class CommandChannelSelection : public CommandBase {
   virtual void Execute() {
     auto color = color_storage_ ? *color_storage_ : QColor();
     controler_->ChannelSelection(color.red(), color.green(), color.blue());
-    controler_->WriteImg("output.bmp");
+    controler_->WriteImg();
   };
 
  private:

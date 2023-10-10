@@ -10,7 +10,7 @@ class Controler {
  public:
   Controler(std::shared_ptr<s21::Model> model) : model_{model} {};
   void ReadImg(const std::string &img_name);
-  void WriteImg(const std::string &img_name);
+  QImage WriteImg();
   void ChannelSelection(int red, int green, int blue);
   void AverageConversion();
   void ConversionByBrightness();
@@ -19,6 +19,7 @@ class Controler {
   void Convolution(const std::string &convolution_name);
   void SobelFilterCombin();
   void ArbitraryMatrixMode(const std::vector<std::vector<double>> &matrix);
+  void Restart();
 
  private:
   std::shared_ptr<s21::Model> model_;

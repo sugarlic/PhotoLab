@@ -5,9 +5,7 @@ void Controler::ReadImg(const std::string &img_name) {
   model_->ReadImg(img_name);
 }
 
-void Controler::WriteImg(const std::string &img_name) {
-  model_->WriteImg(img_name);
-}
+QImage Controler::WriteImg() { return model_->WriteImg(); }
 
 void Controler::ChannelSelection(int red, int green, int blue) {
   model_->ChannelSelection(red, green, blue);
@@ -33,4 +31,6 @@ void Controler::ArbitraryMatrixMode(
     const std::vector<std::vector<double>> &matrix) {
   model_->ArbitraryMatrixMode(matrix);
 }
+
+void s21::Controler::Restart() { model_->Restart(); }
 }  // namespace s21
