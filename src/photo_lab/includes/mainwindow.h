@@ -27,6 +27,7 @@ class MainWindow : public QMainWindow {
   void RecieveData(std::vector<std::vector<double>> matrix);
 
  private slots:
+  void UpdateImage();
   void on_pushButton_clicked();
 
   void on_pushButton_CS_clicked();

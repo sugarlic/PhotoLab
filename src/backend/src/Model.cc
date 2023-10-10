@@ -3,6 +3,8 @@
 #include <fstream>
 
 void s21::Model::ReadImg(const std::string &img_name) {
+  std::ifstream file(img_name);
+  if (!file.is_open()) throw std::invalid_argument("Choose file");
   BMP img;
   img.ReadFromFile(img_name.c_str());
   int width = img.TellWidth();
@@ -15,14 +17,15 @@ void s21::Model::ReadImg(const std::string &img_name) {
       help_matrix[i][j].Red = img.GetPixel(j, i).Red;
       help_matrix[i][j].Green = img.GetPixel(j, i).Green;
       help_matrix[i][j].Blue = img.GetPixel(j, i).Blue;
+      help_matrix[i][j].Alpha = 255;
     }
   }
   img_matrix_ = std::move(help_matrix);
   filtered_matrix_ = img_matrix_;
 }
 
-void s21::Model::WriteImg(const std::string &img_name) {
-  if (img_matrix_.empty()) return;
+QImage s21::Model::WriteImg() {
+  if (img_matrix_.empty()) throw std::runtime_error("ERROR");
   BMP output_img;
   output_img.SetSize(img_matrix_[0].size(), img_matrix_.size());
   for (int i = 0; i < img_matrix_.size(); i++) {
@@ -31,11 +34,12 @@ void s21::Model::WriteImg(const std::string &img_name) {
       pixel.Red = filtered_matrix_[i][j].Red;
       pixel.Green = filtered_matrix_[i][j].Green;
       pixel.Blue = filtered_matrix_[i][j].Blue;
+      pixel.Alpha = filtered_matrix_[i][j].Alpha;
       output_img.SetPixel(j, i, pixel);
     }
   }
-  if (!output_img.WriteToFile(img_name.c_str()))
-    std::cout << "ERROR IN WRITING FILE\n";
+
+  return CreateQimage(output_img);
 }
 
 void s21::Model::ChannelSelection(int red, int green, int blue) {
@@ -179,3 +183,21 @@ void s21::Model::ArbitraryMatrixMode(
   if (!img_matrix_.empty())
     MatrixTransformation(img_matrix_, filtered_matrix_, matrix);
 }
+
+QImage s21::Model::CreateQimage(BMP bmp_image) {
+  int width = bmp_image.TellWidth();
+  int height = bmp_image.TellHeight();
+
+  QImage qImage(width, height, QImage::Format_RGB32);
+
+  for (int y = 0; y < height; ++y) {
+    for (int x = 0; x < width; ++x) {
+      RGBApixel pixel = bmp_image.GetPixel(x, y);
+      qImage.setPixel(x, y, qRgb(pixel.Red, pixel.Green, pixel.Blue));
+    }
+  }
+
+  return qImage;
+}
+
+void s21::Model::Restart() { filtered_matrix_ = img_matrix_; }
