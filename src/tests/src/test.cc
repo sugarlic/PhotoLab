@@ -13,7 +13,7 @@ int main() {
     c.ReadImg("../Images/Lena.bmp");
     // c.Convolution("sobel_filter_right");
     c.SobelFilterCombin();
-    c.WriteImg("output.bmp");
+    c.WriteImg("./output.bmp");
   } catch (...) {
     std::cout << "Не удалось открыть файл\n";
   }
