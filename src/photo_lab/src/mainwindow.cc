@@ -20,7 +20,7 @@ MainWindow::MainWindow(std::shared_ptr<s21::Controler> controler,
 
 MainWindow::~MainWindow() {
   delete ui;
-  std::filesystem::remove("output.bmp");
+  std::filesystem::remove("./output.bmp");
 }
 
 void MainWindow::on_pushButton_clicked() {
@@ -50,7 +50,6 @@ void MainWindow::on_pushButton_CS_clicked() {
   QColor color = colorDialog->getColor();
   if (color.isValid()) {
     controler_->ChannelSelection(color.red(), color.green(), color.blue());
-
   }
 }
 
@@ -76,7 +75,7 @@ void MainWindow::UpdateImage()
 }
 
 void MainWindow::on_pushButton_Save_clicked() {
-  QString sourceFilePath = QDir::currentPath() + "/output.bmp";
+  QString sourceFilePath = QDir::currentPath() + "/./output.bmp";
   QString destinationFilePath;
   QString filename = ui->lineEdit_Filename->text();
 
