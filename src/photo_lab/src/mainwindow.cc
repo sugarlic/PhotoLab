@@ -15,20 +15,19 @@ MainWindow::MainWindow(std::shared_ptr<s21::Controler> controler,
       window_(new MatrixMode),
       controler_{controler} {
   ui->setupUi(this);
+  connect(window_.get(), &MatrixMode::SendData,
+          this, &MainWindow::RecieveData);
   SetupView();
 }
 
-MainWindow::~MainWindow() {
-  delete ui;
-  std::filesystem::remove("./output.bmp");
-}
+MainWindow::~MainWindow() { delete ui; }
 
 void MainWindow::on_pushButton_clicked() {
   QFileDialog fileDialog;
   fileDialog.setWindowTitle("Выберите директорию");
   fileDialog.setFileMode(QFileDialog::ExistingFile);
 
-  fileDialog.setDirectory("../../../../");
+  fileDialog.setDirectory("../");
 
   if (fileDialog.exec()) {
     filename_ = fileDialog.selectedFiles().at(0);
@@ -50,28 +49,29 @@ void MainWindow::on_pushButton_CS_clicked() {
   QColor color = colorDialog->getColor();
   if (color.isValid()) {
     controler_->ChannelSelection(color.red(), color.green(), color.blue());
+    UpdateImage();
   }
 }
 
 void MainWindow::on_pushButton_Restart_clicked() {
-    controler_->Restart();
-    UpdateImage();
+  controler_->Restart();
+  UpdateImage();
 }
 
 void MainWindow::on_pushButton_MM_clicked() { window_->show(); }
 
 void MainWindow::RecieveData(std::vector<std::vector<double>> matrix) {
+  qDebug()<<"Recieved";
   controler_->ArbitraryMatrixMode(matrix);
   UpdateImage();
 }
 
-void MainWindow::UpdateImage()
-{
-    try{
-        ui->label_out->setPixmap(QPixmap::fromImage(controler_->WriteImg()));
-    } catch(...) {
-        return;
-    }
+void MainWindow::UpdateImage() {
+  try {
+    ui->label_out->setPixmap(QPixmap::fromImage(controler_->WriteImg()));
+  } catch (...) {
+    return;
+  }
 }
 
 void MainWindow::on_pushButton_Save_clicked() {

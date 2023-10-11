@@ -1,26 +1,22 @@
-#include <chrono>
+#include <gtest/gtest.h>
 
-#include "Controler/Controler.h"
-#include "Model/Model.h"
+#include "../../backend/includes/Model.h"
 
-using namespace std::chrono;
+TEST(PLab_Test, test1) {
+  EXPECT_ANY_THROW({
+    s21::Model model;
+    model.ReadImg("123");
+  });
+}
 
-int main() {
-  auto t0 = high_resolution_clock::now();
-  s21::Model *model = new s21::Model;
-  s21::Controler c{model};
-  try {
-    c.ReadImg("../Images/Lena.bmp");
-    // c.Convolution("sobel_filter_right");
-    c.SobelFilterCombin();
-    c.WriteImg("./output.bmp");
-  } catch (...) {
-    std::cout << "Не удалось открыть файл\n";
-  }
+TEST(PLab_Test, test2) {
+  EXPECT_NO_THROW({
+    s21::Model model;
+    model.ReadImg("/Users/sullustd/PhotoLab/Images/Lena.bmp");
+  });
+}
 
-  auto t1 = high_resolution_clock::now();
-  std::cout << "Time: " << duration_cast<milliseconds>(t1 - t0).count()
-            << "msec\n";
-
-  return 0;
+int main(int argc, char **argv) {
+  ::testing::InitGoogleTest(&argc, argv);
+  return RUN_ALL_TESTS();
 }
