@@ -114,12 +114,16 @@ void MatrixTransformation(
   int column_right_limit{};
   kernel.size() == 2 ? row_right_limit = 0 : row_right_limit = 1;
   kernel[0].size() == 2 ? column_right_limit = 0 : column_right_limit = 1;
-  for (int i = 1; i < img_matrix_.size() - 1; i++) {
-    for (int j = 1; j < img_matrix_[i].size() - 1; j++) {
+  auto img_rows = img_matrix_.size();
+  for (int i = 0; i < img_rows; i++) {
+    auto img_cols = img_matrix_[i].size();
+    for (int j = 0; j < img_cols; j++) {
       double red = 0, green = 0, blue = 0;
       for (int k = -1; k <= row_right_limit; k++) {
         for (int l = -1; l <= column_right_limit; l++) {
-          auto &img_px = img_matrix_[i + k][j + l];
+          int row = std::clamp<int>(i + k, 0, img_rows - 1);
+          int col = std::clamp<int>(j + k, 0, img_cols - 1);
+          auto &img_px = img_matrix_[row][col];
           auto kernel_val = kernel[k + 1][l + 1];
           red += img_px.Red * kernel_val;
           green += img_px.Green * kernel_val;
