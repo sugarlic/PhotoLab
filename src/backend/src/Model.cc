@@ -227,4 +227,78 @@ void s21::Model::ContrastChange(float contrast) {
     }
 }
 
+void s21::Model::SaturationChange(float shade, float lightness,
+                                  float saturation) {
+  if (img_matrix_.empty()) return;
+  filtered_matrix_ = img_matrix_;
+  for (int i = 0; i < filtered_matrix_.size(); i++)
+    for (int j = 0; j < filtered_matrix_[0].size(); j++) {
+      float h, s, l;
+      float r{static_cast<float>(filtered_matrix_[i][j].Red / 255)};
+      float g{static_cast<float>(filtered_matrix_[i][j].Green / 255)};
+      float b{static_cast<float>(filtered_matrix_[i][j].Blue / 255)};
+      RGBtoHSL(r, g, b, h, s, l);
+
+      h = std::clamp<float>(h * shade, 0, 360);
+      s = std::clamp<float>(s * saturation, 0, 1);
+      l = std::clamp<float>(l * lightness, 0, 1);
+
+      HSLtoRGB(h, s, l, r, g, b);
+
+      filtered_matrix_[i][j].Red = std::clamp<float>(r * 255, 0, 255);
+      filtered_matrix_[i][j].Green = std::clamp<float>(g * 255, 0, 255);
+      filtered_matrix_[i][j].Blue = std::clamp<float>(b * 255, 0, 255);
+    }
+}
+
 void s21::Model::Restart() { filtered_matrix_ = img_matrix_; }
+
+void s21::Model::RGBtoHSL(float r, float g, float b, float &h, float &s,
+                          float &l) {
+  float maxVal = std::max(std::max(r, g), b);
+  float minVal = std::min(std::min(r, g), b);
+
+  float delta = maxVal - minVal;
+
+  if (delta == 0) {
+    h = 0;
+  } else if (maxVal == r) {
+    h = 60 * std::fmod((g - b) / delta, 6);
+  } else if (maxVal == g) {
+    h = 60 * ((b - r) / delta + 2);
+  } else if (maxVal == b) {
+    h = 60 * ((r - g) / delta + 4);
+  }
+
+  l = (maxVal + minVal) / 2;
+
+  if (delta == 0) {
+    s = 0;
+  } else {
+    s = delta / (1 - std::abs(2 * l - 1));
+  }
+}
+
+void s21::Model::HSLtoRGB(float h, float s, float l, float &r, float &g,
+                          float &b) {
+  if (s == 0) {
+    r = g = b = l;
+  } else {
+    float q = l < 0.5 ? l * (1 + s) : l + s - l * s;
+    float p = 2 * l - q;
+    float hk = h / 360;
+
+    r = HueToRGB(p, q, hk + 1 / 3.0);
+    g = HueToRGB(p, q, hk);
+    b = HueToRGB(p, q, hk - 1 / 3.0);
+  }
+}
+
+float s21::Model::HueToRGB(float p, float q, float t) {
+  if (t < 0) t += 1;
+  if (t > 1) t -= 1;
+  if (t < 1 / 6.0) return p + (q - p) * 6 * t;
+  if (t < 1 / 2.0) return q;
+  if (t < 2 / 3.0) return p + (q - p) * (2 / 3.0 - t) * 6;
+  return p;
+}

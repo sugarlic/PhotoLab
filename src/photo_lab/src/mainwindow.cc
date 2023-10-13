@@ -112,3 +112,18 @@ void MainWindow::on_verticalSlider_Contrast_valueChanged(int value) {
   controler_->ContrastChange(static_cast<float>(value) / 100);
   UpdateImage();
 }
+
+void MainWindow::on_verticalSlider_HSL_valueChanged(int value) {
+  controler_->SaturationChange(1, 1, static_cast<float>(value) / 100);
+  UpdateImage();
+}
+
+void MainWindow::on_verticalSlider_Lightness_valueChanged(int value) {
+  controler_->SaturationChange(1, static_cast<float>(value) / 100, 1);
+  UpdateImage();
+}
+
+void MainWindow::on_verticalSlider_Shade_valueChanged(int value) {
+  controler_->SaturationChange(static_cast<float>(value) / 100, 1, 1);
+  UpdateImage();
+}

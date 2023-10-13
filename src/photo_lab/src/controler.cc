@@ -40,5 +40,10 @@ void s21::Controler::ContrastChange(float contrast) {
   model_->ContrastChange(contrast);
 }
 
+void s21::Controler::SaturationChange(float shade, float lightness,
+                                      float saturation) {
+  model_->SaturationChange(shade, lightness, saturation);
+}
+
 void s21::Controler::Restart() { model_->Restart(); }
 }  // namespace s21
