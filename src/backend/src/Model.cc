@@ -5,6 +5,7 @@
 void s21::Model::ReadImg(const std::string &img_name) {
   std::ifstream file(img_name);
   if (!file.is_open()) throw std::invalid_argument("Choose file");
+  filename_ = img_name;
   BMP img;
   img.ReadFromFile(img_name.c_str());
   int width = img.TellWidth();
@@ -26,11 +27,11 @@ void s21::Model::ReadImg(const std::string &img_name) {
 }
 
 QImage s21::Model::WriteImg() {
-  if (img_matrix_.empty()) throw std::runtime_error("ERROR");
+  if (img_matrix_.empty()) return QImage();
   BMP output_img;
   output_img.SetSize(img_matrix_[0].size(), img_matrix_.size());
-  for (int i = 0; i < img_matrix_.size(); i++)
-    for (int j = 0; j < img_matrix_[0].size(); j++)
+  for (size_t i = 0; i < img_matrix_.size(); i++)
+    for (size_t j = 0; j < img_matrix_[0].size(); j++)
       output_img.SetPixel(j, i, filtered_matrix_[i][j]);
 
   return CreateQimage(output_img);
@@ -110,20 +111,20 @@ void MatrixTransformation(
     const std::vector<std::vector<EasyBMP::RGBApixel>> &img_matrix_,
     std::vector<std::vector<EasyBMP::RGBApixel>> &filtered_matrix_,
     const std::vector<std::vector<double>> &kernel) {
-  int row_right_limit{};
-  int column_right_limit{};
-  kernel.size() == 2 ? row_right_limit = 0 : row_right_limit = 1;
-  kernel[0].size() == 2 ? column_right_limit = 0 : column_right_limit = 1;
-  auto img_rows = img_matrix_.size();
+  int row_right_limit = !(kernel.size() == 2);
+  int column_right_limit = !(kernel[0].size() == 2);
+  int img_rows = img_matrix_.size();
+
   for (int i = 0; i < img_rows; i++) {
-    auto img_cols = img_matrix_[i].size();
+    int img_cols = img_matrix_[i].size();
+
     for (int j = 0; j < img_cols; j++) {
-      double red = 0, green = 0, blue = 0;
+      int red = 0, green = 0, blue = 0;
       for (int k = -1; k <= row_right_limit; k++) {
         for (int l = -1; l <= column_right_limit; l++) {
           int row = std::clamp<int>(i + k, 0, img_rows - 1);
           int col = std::clamp<int>(j + k, 0, img_cols - 1);
-          auto &img_px = img_matrix_[row][col];
+          auto img_px = img_matrix_[row][col];
           auto kernel_val = kernel[k + 1][l + 1];
           red += img_px.Red * kernel_val;
           green += img_px.Green * kernel_val;
@@ -201,8 +202,8 @@ QImage s21::Model::CreateQimage(BMP bmp_image) {
 void s21::Model::BrightnessChange(float brightness) {
   if (img_matrix_.empty()) return;
   filtered_matrix_ = img_matrix_;
-  for (int i = 0; i < filtered_matrix_.size(); i++)
-    for (int j = 0; j < filtered_matrix_[0].size(); j++) {
+  for (size_t i = 0; i < filtered_matrix_.size(); i++)
+    for (size_t j = 0; j < filtered_matrix_[0].size(); j++) {
       filtered_matrix_[i][j].Red =
           std::clamp<float>(filtered_matrix_[i][j].Red * brightness, 0, 255);
       filtered_matrix_[i][j].Blue =
@@ -215,8 +216,8 @@ void s21::Model::BrightnessChange(float brightness) {
 void s21::Model::ContrastChange(float contrast) {
   if (img_matrix_.empty()) return;
   filtered_matrix_ = img_matrix_;
-  for (int i = 0; i < filtered_matrix_.size(); i++)
-    for (int j = 0; j < filtered_matrix_[0].size(); j++) {
+  for (size_t i = 0; i < filtered_matrix_.size(); i++)
+    for (size_t j = 0; j < filtered_matrix_[0].size(); j++) {
       filtered_matrix_[i][j].Red = std::clamp<float>(
           (filtered_matrix_[i][j].Red - 128) * contrast + 128, 0, 255);
       filtered_matrix_[i][j].Blue = std::clamp<float>(

@@ -21,6 +21,7 @@ class Controler {
   void ArbitraryMatrixMode(const std::vector<std::vector<double>> &matrix);
   void BrightnessChange(float brightness);
   void ContrastChange(float contrast);
+  std::string GetFilename() { return model_->GetFilename(); }
   void Restart();
 
  private:

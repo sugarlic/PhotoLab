@@ -259,7 +259,97 @@
      <height>22</height>
     </rect>
    </property>
+   <widget class="QMenu" name="menuFilters">
+    <property name="title">
+     <string>Filters</string>
+    </property>
+    <widget class="QMenu" name="menuConversion">
+     <property name="title">
+      <string>Conversion</string>
+     </property>
+     <addaction name="actionAverage_conversion"/>
+     <addaction name="actionBy_brightness"/>
+     <addaction name="actionBy_desaturation"/>
+    </widget>
+    <widget class="QMenu" name="menuConvolution">
+     <property name="title">
+      <string>Convolution</string>
+     </property>
+     <addaction name="actionEmbos"/>
+     <addaction name="actionBox_blur"/>
+     <addaction name="actionGaussian_blur"/>
+     <addaction name="actionLaplacian_filter"/>
+     <addaction name="actionSober_filter_left"/>
+     <addaction name="actionSober_filter_right"/>
+    </widget>
+    <addaction name="menuConvolution"/>
+    <addaction name="menuConversion"/>
+    <addaction name="actionNegative"/>
+    <addaction name="actionSober_combined"/>
+    <addaction name="actionChannel_selection"/>
+   </widget>
+   <addaction name="menuFilters"/>
   </widget>
+  <action name="actionNegative">
+   <property name="text">
+    <string>Negative</string>
+   </property>
+  </action>
+  <action name="actionAverage_conversion">
+   <property name="text">
+    <string>By average</string>
+   </property>
+  </action>
+  <action name="actionBy_brightness">
+   <property name="text">
+    <string>By brightness</string>
+   </property>
+  </action>
+  <action name="actionBy_desaturation">
+   <property name="text">
+    <string>By desaturation</string>
+   </property>
+  </action>
+  <action name="actionChannel_selection">
+   <property name="text">
+    <string>Channel selection</string>
+   </property>
+  </action>
+  <action name="actionEmbos">
+   <property name="text">
+    <string>Embos</string>
+   </property>
+  </action>
+  <action name="actionBox_blur">
+   <property name="text">
+    <string>Box blur</string>
+   </property>
+  </action>
+  <action name="actionGaussian_blur">
+   <property name="text">
+    <string>Gaussian blur</string>
+   </property>
+  </action>
+  <action name="actionLaplacian_filter">
+   <property name="text">
+    <string>Laplacian filter</string>
+   </property>
+  </action>
+  <action name="actionSober_filter_left">
+   <property name="text">
+    <string>Sober left</string>
+   </property>
+  </action>
+  <action name="actionSober_filter_right">
+   <property name="text">
+    <string>Sober right</string>
+   </property>
+  </action>
+  <action name="actionSober_combined">
+   <property name="text">
+    <string>Sober combined</string>
+   </property>
+  </action>
  </widget>
  <resources/>
  <connections/>

@@ -28,32 +28,21 @@ class MainWindow : public QMainWindow {
 
  private slots:
   void UpdateImage();
-  void on_pushButton_clicked();
-
-  void on_pushButton_CS_clicked();
-
-  void on_pushButton_Restart_clicked();
-
+  void RequestFileName();
+  void RequestImageSource();
   void on_pushButton_MM_clicked();
-
-  void on_pushButton_Save_clicked();
-
   void on_verticalSlider_Brightness_valueChanged(int value);
-
   void on_verticalSlider_Contrast_valueChanged(int value);
 
-private:
+ private:
   Ui::MainWindow* ui;
   std::shared_ptr<MatrixMode> window_;
   std::shared_ptr<s21::Controler> controler_;
   std::vector<std::shared_ptr<s21::ContolerButton>> controler_btns_;
-  // std::vector<std::shared_ptr<s21::ContolerButton>>
-  // controler_convolution_btns_;
   QString filename_;
   void SetupView();
   std::shared_ptr<s21::ContolerButton> CreateControlerBtn(
       s21::CommandBase* command, const QString& text);
-  void FileReopen(const QString fname);
 };
 
 #endif  // MAINWINDOW_H

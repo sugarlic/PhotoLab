@@ -1,6 +1,8 @@
 #ifndef CONTROLER_COMMANDS_H
 #define CONTROLER_COMMANDS_H
 #include "QColor"
+#include "QDir"
+#include "QFileDialog"
 #include "controler.h"
 namespace s21 {
 class CommandBase {
@@ -16,45 +18,58 @@ class CommandNegative : public CommandBase {
  public:
   CommandNegative(std::shared_ptr<Controler> controler)
       : CommandBase(controler) {}
-  virtual void Execute() {
-    controler_->Negative();
-    controler_->WriteImg();
-  };
+  virtual void Execute() { controler_->Negative(); };
 };
 class CommandAverageConversion : public CommandBase {
  public:
   CommandAverageConversion(std::shared_ptr<Controler> controler)
       : CommandBase(controler) {}
-  virtual void Execute() {
-    controler_->AverageConversion();
-    controler_->WriteImg();
-  };
+  virtual void Execute() { controler_->AverageConversion(); };
 };
 class CommandConversionByBrightness : public CommandBase {
  public:
   CommandConversionByBrightness(std::shared_ptr<Controler> controler)
       : CommandBase(controler) {}
-  virtual void Execute() {
-    controler_->ConversionByBrightness();
-    controler_->WriteImg();
-  };
+  virtual void Execute() { controler_->ConversionByBrightness(); };
 };
 class CommandConversionByDesaturation : public CommandBase {
  public:
   CommandConversionByDesaturation(std::shared_ptr<Controler> controler)
       : CommandBase(controler) {}
-  virtual void Execute() {
-    controler_->ConversionByDesaturation();
-    controler_->WriteImg();
-  };
+  virtual void Execute() { controler_->ConversionByDesaturation(); };
 };
 class CommandSobelFilterCombin : public CommandBase {
  public:
   CommandSobelFilterCombin(std::shared_ptr<Controler> controler)
       : CommandBase(controler) {}
+  virtual void Execute() { controler_->SobelFilterCombin(); };
+};
+class CommandRestart : public CommandBase {
+ public:
+  CommandRestart(std::shared_ptr<Controler> controler)
+      : CommandBase(controler) {}
+  virtual void Execute() { controler_->Restart(); };
+};
+class CommandOpenBMP : public CommandBase {
+ public:
+  CommandOpenBMP(std::shared_ptr<Controler> controler)
+      : CommandBase(controler) {}
   virtual void Execute() {
-    controler_->SobelFilterCombin();
-    controler_->WriteImg();
+    auto path = QFileDialog::getOpenFileName(nullptr, "Открыть BMP файл",
+                                             QDir::current().absolutePath(),
+                                             "BMP(*.bmp)");
+    controler_->ReadImg(path.toStdString());
+  };
+};
+class CommandSaveBMP : public CommandBase {
+ public:
+  CommandSaveBMP(std::shared_ptr<Controler> controler)
+      : CommandBase(controler) {}
+  virtual void Execute() {
+    auto path = QFileDialog::getSaveFileName(nullptr, "Сохранить BMP файл", "",
+                                             "BMP(*.bmp)");
+    auto image = controler_->WriteImg();
+    image.save(path);
   };
 };
 class CommandConvolution : public CommandBase {
@@ -62,10 +77,7 @@ class CommandConvolution : public CommandBase {
   CommandConvolution(std::shared_ptr<Controler> controler,
                      std::string convolution_name)
       : CommandBase(controler), convolution_name_(convolution_name) {}
-  virtual void Execute() {
-    controler_->Convolution(convolution_name_);
-    controler_->WriteImg();
-  };
+  virtual void Execute() { controler_->Convolution(convolution_name_); };
 
  private:
   std::string convolution_name_;
@@ -78,7 +90,6 @@ class CommandChannelSelection : public CommandBase {
   virtual void Execute() {
     auto color = color_storage_ ? *color_storage_ : QColor();
     controler_->ChannelSelection(color.red(), color.green(), color.blue());
-    controler_->WriteImg();
   };
 
  private:

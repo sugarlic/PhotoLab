@@ -27,9 +27,11 @@ class Model {
   void ArbitraryMatrixMode(const std::vector<std::vector<double>> &matrix);
   void BrightnessChange(float brightness);
   void ContrastChange(float contrast);
+  inline std::string GetFilename() { return filename_; }
   void Restart();
 
  private:
+  std::string filename_ = "";
   std::vector<std::vector<EasyBMP::RGBApixel>> img_matrix_;
   std::vector<std::vector<EasyBMP::RGBApixel>> filtered_matrix_;
   // std::vector<std::vector<EasyBMP::RGBApixel>> interjacent_image_;
@@ -37,11 +39,14 @@ class Model {
       {"Original image", {{0, 0, 0}, {0, 1, 0}, {0, 0, 0}}},
       {"Embos", {{-2, -1, 0}, {-1, 1, 1}, {0, 1, 2}}},
       {"Sharpen", {{0, -1, 0}, {-1, 4, -1}, {0, -1, 0}}},
-      {"Box blur", {{1, 1, 1}, {1, 1, 1}, {1, 1, 1}}},  // ????
+      {"Box blur",
+       {{1 / 9.f, 1 / 9.f, 1 / 9.f},
+        {1 / 9.f, 1 / 9.f, 1 / 9.f},
+        {1 / 9.f, 1 / 9.f, 1 / 9.f}}},  // ????
       {"Gaussian blur",
-       {{1 / 2.5, 2 / 2.5, 1 / 2.5},
-        {2 / 2.5, 4 / 2.5, 2 / 2.5},
-        {1 / 2.5, 2 / 2.5, 1 / 2.5}}},  // ????
+       {{1 / 16.f, 2 / 16.f, 1 / 16.f},
+        {2 / 16.f, 4 / 16.f, 2 / 16.f},
+        {1 / 16.f, 2 / 16.f, 1 / 16.f}}},  // ????
       {"Laplacian filter", {{-1, -1, -1}, {-1, 8, -1}, {-1, -1, -1}}},
       {"Sobel filter left", {{1, 0, -1}, {2, 0, -2}, {1, 0, -1}}},
       {"Sobel filter right", {{-1, 0, 1}, {-2, 0, 2}, {-1, 0, 1}}}};
