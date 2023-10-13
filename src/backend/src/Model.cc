@@ -4,7 +4,7 @@
 
 void s21::Model::ReadImg(const std::string &img_name) {
   std::ifstream file(img_name);
-  if (!file.is_open()) throw std::invalid_argument("Choose file");
+  if (!file.is_open()) return;
   filename_ = img_name;
   BMP img;
   img.ReadFromFile(img_name.c_str());

@@ -23,6 +23,7 @@ class Controler {
   void ContrastChange(float contrast);
   void SaturationChange(float shade, float lightness, float saturation);
   void Restart();
+  std::string GetFilename() { return model_->GetFilename(); }
 
  private:
   std::shared_ptr<s21::Model> model_;

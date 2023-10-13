@@ -29,6 +29,7 @@ class Model {
   void ContrastChange(float contrast);
   void SaturationChange(float shade, float lightness, float saturation);
   void Restart();
+  std::string GetFilename() { return filename_; }
 
  private:
   std::string filename_ = "";
