@@ -42,6 +42,12 @@ class MainWindow : public QMainWindow {
 
   void on_verticalSlider_Contrast_valueChanged(int value);
 
+  void on_verticalSlider_HSL_valueChanged(int value);
+
+  void on_verticalSlider_Lightness_valueChanged(int value);
+
+  void on_verticalSlider_Shade_valueChanged(int value);
+
 private:
   Ui::MainWindow* ui;
   std::shared_ptr<MatrixMode> window_;
