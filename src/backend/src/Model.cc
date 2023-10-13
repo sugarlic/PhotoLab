@@ -198,4 +198,32 @@ QImage s21::Model::CreateQimage(BMP bmp_image) {
   return qImage;
 }
 
+void s21::Model::BrightnessChange(float brightness) {
+  if (img_matrix_.empty()) return;
+  filtered_matrix_ = img_matrix_;
+  for (int i = 0; i < filtered_matrix_.size(); i++)
+    for (int j = 0; j < filtered_matrix_[0].size(); j++) {
+      filtered_matrix_[i][j].Red =
+          std::clamp<float>(filtered_matrix_[i][j].Red * brightness, 0, 255);
+      filtered_matrix_[i][j].Blue =
+          std::clamp<float>(filtered_matrix_[i][j].Blue * brightness, 0, 255);
+      filtered_matrix_[i][j].Green =
+          std::clamp<float>(filtered_matrix_[i][j].Green * brightness, 0, 255);
+    }
+}
+
+void s21::Model::ContrastChange(float contrast) {
+  if (img_matrix_.empty()) return;
+  filtered_matrix_ = img_matrix_;
+  for (int i = 0; i < filtered_matrix_.size(); i++)
+    for (int j = 0; j < filtered_matrix_[0].size(); j++) {
+      filtered_matrix_[i][j].Red = std::clamp<float>(
+          (filtered_matrix_[i][j].Red - 128) * contrast + 128, 0, 255);
+      filtered_matrix_[i][j].Blue = std::clamp<float>(
+          (filtered_matrix_[i][j].Blue - 128) * contrast + 128, 0, 255);
+      filtered_matrix_[i][j].Green = std::clamp<float>(
+          (filtered_matrix_[i][j].Green - 128) * contrast + 128, 0, 255);
+    }
+}
+
 void s21::Model::Restart() { filtered_matrix_ = img_matrix_; }

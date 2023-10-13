@@ -38,7 +38,11 @@ class MainWindow : public QMainWindow {
 
   void on_pushButton_Save_clicked();
 
- private:
+  void on_verticalSlider_Brightness_valueChanged(int value);
+
+  void on_verticalSlider_Contrast_valueChanged(int value);
+
+private:
   Ui::MainWindow* ui;
   std::shared_ptr<MatrixMode> window_;
   std::shared_ptr<s21::Controler> controler_;

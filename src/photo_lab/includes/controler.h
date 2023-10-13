@@ -19,6 +19,8 @@ class Controler {
   void Convolution(const std::string &convolution_name);
   void SobelFilterCombin();
   void ArbitraryMatrixMode(const std::vector<std::vector<double>> &matrix);
+  void BrightnessChange(float brightness);
+  void ContrastChange(float contrast);
   void Restart();
 
  private:

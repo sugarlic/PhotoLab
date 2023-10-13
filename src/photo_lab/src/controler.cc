@@ -32,5 +32,13 @@ void Controler::ArbitraryMatrixMode(
   model_->ArbitraryMatrixMode(matrix);
 }
 
+void s21::Controler::BrightnessChange(float brightness) {
+  model_->BrightnessChange(brightness);
+}
+
+void s21::Controler::ContrastChange(float contrast) {
+  model_->ContrastChange(contrast);
+}
+
 void s21::Controler::Restart() { model_->Restart(); }
 }  // namespace s21

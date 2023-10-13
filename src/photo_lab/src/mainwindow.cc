@@ -143,3 +143,17 @@ std::shared_ptr<s21::ContolerButton> MainWindow::CreateControlerBtn(
   return std::make_shared<s21::ContolerButton>(std::move(command_ptr), text,
                                                this);
 }
+
+void MainWindow::on_verticalSlider_Brightness_valueChanged(int value)
+{
+    controler_->BrightnessChange(static_cast<float>(value)/100);
+    UpdateImage();
+}
+
+
+void MainWindow::on_verticalSlider_Contrast_valueChanged(int value)
+{
+    controler_->ContrastChange(static_cast<float>(value)/100);
+    UpdateImage();
+}
+
