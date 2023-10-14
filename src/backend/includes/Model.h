@@ -21,6 +21,7 @@ class Model {
   enum ColorChannel { kNone, kRed, kGreen, kBlue };
   void ReadImg(const std::string& img_name);
   QImage WriteImg();
+  QImage GetSource();
   void ChannelSelection(ColorChannel channel);
   void AverageConversion();
   void ConversionByBrightness();

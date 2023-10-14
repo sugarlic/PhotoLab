@@ -14,7 +14,7 @@ namespace Ui {
 class MainWindow;
 }
 QT_END_NAMESPACE
-
+#include "ui_mainwindow.h"
 class MainWindow : public QMainWindow {
   Q_OBJECT
 
@@ -40,8 +40,9 @@ class MainWindow : public QMainWindow {
 
   void on_verticalSlider_Shade_valueChanged(int value);
 
-private:
+ private:
   Ui::MainWindow* ui;
+
   std::shared_ptr<MatrixMode> window_;
   std::shared_ptr<s21::Controler> controler_;
   std::vector<std::shared_ptr<s21::ControlerPushButton>> controler_btns_;
@@ -49,6 +50,15 @@ private:
   void SetupView();
   std::shared_ptr<s21::ControlerPushButton> CreateControlerBtn(
       s21::CommandBase* command, const QString& text);
+  void resizeEvent(QResizeEvent* event) override {
+    auto l1 = ui->Source_Image_L;
+    auto l2 = ui->Filtered_Image_L;
+    auto map = QPixmap::fromImage(controler_->GetSource().scaled(l1->size()));
+    l1->setPixmap(map);
+    map = QPixmap::fromImage(controler_->WriteImg().scaled(l2->size()));
+    l2->setPixmap(map);
+    QMainWindow::resizeEvent(event);
+  }
 };
 
 #endif  // MAINWINDOW_H

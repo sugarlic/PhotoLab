@@ -6,7 +6,7 @@
 #include <QFileDialog>
 #include <filesystem>
 
-#include "ui_mainwindow.h"
+
 
 MainWindow::MainWindow(std::shared_ptr<s21::Controler> controler,
                        QWidget *parent)
@@ -30,16 +30,20 @@ void MainWindow::RecieveData(std::vector<std::vector<double>> matrix) {
 }
 
 void MainWindow::UpdateImage() {
-  ui->label_out->setPixmap(QPixmap::fromImage(controler_->WriteImg()));
+  auto map = QPixmap::fromImage(
+      controler_->WriteImg().scaled(ui->Filtered_Image_L->size()));
+  ui->Filtered_Image_L->setPixmap(map);
 }
 
 void MainWindow::RequestFileName() {
-  // ui->label_fname->setText(controler_->GetFilename().c_str());
+  ui->Filename_L->setText(controler_->GetFilename().c_str());
 }
 
 void MainWindow::RequestImageSource() {
   controler_->Restart();
-  ui->label->setPixmap(QPixmap::fromImage(controler_->WriteImg()));
+  auto map = QPixmap::fromImage(
+      controler_->WriteImg().scaled(ui->Source_Image_L->size()));
+  ui->Source_Image_L->setPixmap(map);
 }
 
 void MainWindow::SetupView() {
@@ -50,8 +54,7 @@ void MainWindow::SetupView() {
   auto connect_to_action = [](QAction *act,
                               std::shared_ptr<s21::ControlerPushButton> but,
                               ctrl_btn_vec &arr) {
-    connect(act, &QAction::triggered, but.get(),
-            &QPushButton::click);
+    connect(act, &QAction::triggered, but.get(), &QPushButton::click);
     arr.push_back(but);
   };
   connect_to_action(

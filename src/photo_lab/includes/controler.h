@@ -11,6 +11,7 @@ class Controler {
   Controler(std::shared_ptr<s21::Model> model) : model_{model} {};
   void ReadImg(const std::string &img_name);
   QImage WriteImg();
+  QImage GetSource() { return model_->GetSource(); }
   void ChannelSelection(Model::ColorChannel channel);
   void AverageConversion();
   void ConversionByBrightness();

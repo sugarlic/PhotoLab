@@ -6,239 +6,280 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1845</width>
-    <height>826</height>
+    <width>973</width>
+    <height>714</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QLabel" name="label_fname">
-    <property name="geometry">
-     <rect>
-      <x>630</x>
-      <y>20</y>
-      <width>391</width>
-      <height>51</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string/>
-    </property>
-   </widget>
-   <widget class="QWidget" name="gridLayoutWidget_2">
-    <property name="geometry">
-     <rect>
-      <x>1379</x>
-      <y>211</y>
-      <width>186</width>
-      <height>352</height>
-     </rect>
-    </property>
-    <layout class="QGridLayout" name="Convolution_btns" rowstretch="0" columnstretch="0">
-     <property name="spacing">
-      <number>0</number>
-     </property>
-    </layout>
-   </widget>
-   <widget class="QPushButton" name="pushButton_MM">
-    <property name="geometry">
-     <rect>
-      <x>1187</x>
-      <y>742</y>
-      <width>209</width>
-      <height>38</height>
-     </rect>
-    </property>
-    <property name="sizePolicy">
-     <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
-      <horstretch>0</horstretch>
-      <verstretch>0</verstretch>
-     </sizepolicy>
-    </property>
-    <property name="text">
-     <string>Matrix mode</string>
-    </property>
-   </widget>
-   <widget class="QWidget" name="verticalLayoutWidget">
-    <property name="geometry">
-     <rect>
-      <x>1598</x>
-      <y>212</y>
-      <width>176</width>
-      <height>347</height>
-     </rect>
-    </property>
-    <layout class="QVBoxLayout" name="Controler_btns"/>
-   </widget>
-   <widget class="QLabel" name="label_out">
-    <property name="geometry">
-     <rect>
-      <x>620</x>
-      <y>40</y>
-      <width>701</width>
-      <height>611</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string/>
-    </property>
-   </widget>
-   <widget class="QLabel" name="label">
-    <property name="geometry">
-     <rect>
-      <x>21</x>
-      <y>11</y>
-      <width>611</width>
-      <height>651</height>
-     </rect>
-    </property>
-    <property name="sizePolicy">
-     <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
-      <horstretch>0</horstretch>
-      <verstretch>0</verstretch>
-     </sizepolicy>
-    </property>
-    <property name="text">
-     <string/>
-    </property>
-   </widget>
-   <widget class="QSlider" name="verticalSlider_Brightness">
-    <property name="geometry">
-     <rect>
-      <x>1490</x>
-      <y>620</y>
-      <width>22</width>
-      <height>160</height>
-     </rect>
-    </property>
-    <property name="maximum">
-     <number>199</number>
-    </property>
-    <property name="value">
-     <number>99</number>
-    </property>
-    <property name="orientation">
-     <enum>Qt::Vertical</enum>
-    </property>
-   </widget>
-   <widget class="QLabel" name="label_3">
-    <property name="geometry">
-     <rect>
-      <x>1470</x>
-      <y>780</y>
-      <width>71</width>
-      <height>16</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Brightness</string>
-    </property>
-   </widget>
-   <widget class="QSlider" name="verticalSlider_Contrast">
-    <property name="geometry">
-     <rect>
-      <x>1554</x>
-      <y>620</y>
-      <width>22</width>
-      <height>160</height>
-     </rect>
-    </property>
-    <property name="minimum">
-     <number>-100</number>
-    </property>
-    <property name="maximum">
-     <number>100</number>
-    </property>
-    <property name="value">
-     <number>0</number>
-    </property>
-    <property name="orientation">
-     <enum>Qt::Vertical</enum>
-    </property>
-   </widget>
-   <widget class="QSlider" name="verticalSlider_HSL">
-    <property name="geometry">
-     <rect>
-      <x>1760</x>
-      <y>620</y>
-      <width>22</width>
-      <height>160</height>
-     </rect>
-    </property>
-    <property name="value">
-     <number>50</number>
-    </property>
-    <property name="orientation">
-     <enum>Qt::Vertical</enum>
-    </property>
-   </widget>
-   <widget class="QLabel" name="label_4">
-    <property name="geometry">
-     <rect>
-      <x>1750</x>
-      <y>780</y>
-      <width>61</width>
-      <height>16</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>HSL/HSV</string>
-    </property>
-   </widget>
-   <widget class="QSlider" name="verticalSlider_Lightness">
-    <property name="geometry">
-     <rect>
-      <x>1810</x>
-      <y>620</y>
-      <width>22</width>
-      <height>160</height>
-     </rect>
-    </property>
-    <property name="value">
-     <number>50</number>
-    </property>
-    <property name="orientation">
-     <enum>Qt::Vertical</enum>
-    </property>
-   </widget>
-   <widget class="QSlider" name="verticalSlider_Shade">
-    <property name="geometry">
-     <rect>
-      <x>1710</x>
-      <y>620</y>
-      <width>22</width>
-      <height>160</height>
-     </rect>
-    </property>
-    <property name="value">
-     <number>50</number>
-    </property>
-    <property name="orientation">
-     <enum>Qt::Vertical</enum>
-    </property>
-   </widget>
-   <widget class="QLabel" name="label_out_2">
-    <property name="geometry">
-     <rect>
-      <x>619</x>
-      <y>55</y>
-      <width>693</width>
-      <height>604</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string/>
-    </property>
-   </widget>
+   <property name="sizePolicy">
+    <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+     <horstretch>0</horstretch>
+     <verstretch>0</verstretch>
+    </sizepolicy>
+   </property>
+   <layout class="QGridLayout" name="gridLayout_3">
+    <item row="0" column="0">
+     <layout class="QGridLayout" name="gridLayout_2">
+      <item row="0" column="0">
+       <layout class="QHBoxLayout" name="horizontalLayout" stretch="1,1">
+        <property name="spacing">
+         <number>5</number>
+        </property>
+        <property name="leftMargin">
+         <number>5</number>
+        </property>
+        <property name="topMargin">
+         <number>5</number>
+        </property>
+        <property name="rightMargin">
+         <number>5</number>
+        </property>
+        <property name="bottomMargin">
+         <number>5</number>
+        </property>
+        <item>
+         <widget class="QLabel" name="Source_Image_L">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Ignored" vsizetype="Ignored">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="text">
+           <string/>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="Filtered_Image_L">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Ignored" vsizetype="Ignored">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="text">
+           <string/>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item row="0" column="1">
+       <layout class="QGridLayout" name="Convolution_btns" rowstretch="0" columnstretch="0">
+        <property name="spacing">
+         <number>0</number>
+        </property>
+       </layout>
+      </item>
+      <item row="0" column="2">
+       <layout class="QVBoxLayout" name="CTRL_BTNS">
+        <item>
+         <widget class="QLabel" name="Filename_L">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="text">
+           <string/>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <layout class="QVBoxLayout" name="Controler_btns">
+          <item>
+           <widget class="QPushButton" name="pushButton_MM">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="text">
+             <string>Matrix mode</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+       </layout>
+      </item>
+      <item row="0" column="3">
+       <layout class="QVBoxLayout" name="verticalLayout">
+        <item>
+         <layout class="QGridLayout" name="BS_LT">
+          <property name="sizeConstraint">
+           <enum>QLayout::SetDefaultConstraint</enum>
+          </property>
+          <item row="0" column="0">
+           <widget class="QSlider" name="verticalSlider_Brightness">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="maximum">
+             <number>199</number>
+            </property>
+            <property name="value">
+             <number>99</number>
+            </property>
+            <property name="orientation">
+             <enum>Qt::Vertical</enum>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QSlider" name="verticalSlider_Contrast">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="minimum">
+             <number>-100</number>
+            </property>
+            <property name="maximum">
+             <number>100</number>
+            </property>
+            <property name="value">
+             <number>0</number>
+            </property>
+            <property name="orientation">
+             <enum>Qt::Vertical</enum>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QLabel" name="Brightness_L">
+            <property name="text">
+             <string>Brightness</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <widget class="QLabel" name="label">
+            <property name="text">
+             <string>Saturation</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <layout class="QGridLayout" name="gridLayout">
+          <item row="0" column="1">
+           <widget class="QLabel" name="HSL_L">
+            <property name="text">
+             <string>HSL/HSV</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="2">
+           <widget class="QSlider" name="verticalSlider_Lightness">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="value">
+             <number>50</number>
+            </property>
+            <property name="orientation">
+             <enum>Qt::Vertical</enum>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <widget class="QSlider" name="verticalSlider_HSL">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="value">
+             <number>50</number>
+            </property>
+            <property name="orientation">
+             <enum>Qt::Vertical</enum>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QSlider" name="verticalSlider_Shade">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="value">
+             <number>50</number>
+            </property>
+            <property name="orientation">
+             <enum>Qt::Vertical</enum>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="0">
+           <widget class="QLabel" name="HSL_Param_1_L">
+            <property name="text">
+             <string>HSL</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="1">
+           <widget class="QLabel" name="HSL_Param_2_L">
+            <property name="text">
+             <string>Lightness</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="2">
+           <widget class="QLabel" name="HSL_Param_3_L">
+            <property name="text">
+             <string>Shade</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+       </layout>
+      </item>
+     </layout>
+    </item>
+   </layout>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1845</width>
+     <width>973</width>
      <height>24</height>
     </rect>
    </property>

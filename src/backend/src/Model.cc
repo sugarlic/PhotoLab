@@ -36,7 +36,7 @@ QImage Model::WriteImg() {
 
   return CreateQimage(output_img);
 }
-
+QImage Model::GetSource() { return QImage(filename_.c_str(), ".bmp"); };
 void Model::ChannelSelection(ColorChannel channel) {
   if (channel == kNone) return;
   for (size_t i = 0; i < img_matrix_.size(); i++) {
