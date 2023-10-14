@@ -44,10 +44,10 @@ private:
   Ui::MainWindow* ui;
   std::shared_ptr<MatrixMode> window_;
   std::shared_ptr<s21::Controler> controler_;
-  std::vector<std::shared_ptr<s21::ContolerButton>> controler_btns_;
+  std::vector<std::shared_ptr<s21::ControlerPushButton>> controler_btns_;
   QString filename_;
   void SetupView();
-  std::shared_ptr<s21::ContolerButton> CreateControlerBtn(
+  std::shared_ptr<s21::ControlerPushButton> CreateControlerBtn(
       s21::CommandBase* command, const QString& text);
 };
 

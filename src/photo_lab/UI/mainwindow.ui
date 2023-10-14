@@ -6,101 +6,14 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1844</width>
-    <height>829</height>
+    <width>1845</width>
+    <height>826</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QWidget" name="gridLayoutWidget">
-    <property name="geometry">
-     <rect>
-      <x>1380</x>
-      <y>10</y>
-      <width>211</width>
-      <height>197</height>
-     </rect>
-    </property>
-    <layout class="QGridLayout" name="gridLayout">
-     <item row="0" column="0">
-      <widget class="QLabel" name="label_2">
-       <property name="enabled">
-        <bool>false</bool>
-       </property>
-       <property name="text">
-        <string>Simple filtrs</string>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="0">
-      <widget class="QPushButton" name="pushButton">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="text">
-        <string>Open file</string>
-       </property>
-      </widget>
-     </item>
-     <item row="2" column="0">
-      <widget class="QPushButton" name="pushButton_Save">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="text">
-        <string>Save image</string>
-       </property>
-      </widget>
-     </item>
-     <item row="6" column="0">
-      <widget class="QPushButton" name="pushButton_CS">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="text">
-        <string>Chanel selection</string>
-       </property>
-      </widget>
-     </item>
-     <item row="7" column="0">
-      <widget class="QPushButton" name="pushButton_Restart">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="text">
-        <string>Restart</string>
-       </property>
-      </widget>
-     </item>
-     <item row="3" column="0">
-      <widget class="QLineEdit" name="lineEdit_Filename">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="text">
-        <string>File name</string>
-       </property>
-      </widget>
-     </item>
-    </layout>
-   </widget>
    <widget class="QLabel" name="label_fname">
     <property name="geometry">
      <rect>
@@ -119,21 +32,14 @@
      <rect>
       <x>1379</x>
       <y>211</y>
-      <width>211</width>
-      <height>351</height>
+      <width>186</width>
+      <height>352</height>
      </rect>
     </property>
-    <layout class="QGridLayout" name="Convolution_btns">
-     <item row="0" column="0">
-      <widget class="QLabel" name="Convolution_L">
-       <property name="enabled">
-        <bool>false</bool>
-       </property>
-       <property name="text">
-        <string>Convolution filters</string>
-       </property>
-      </widget>
-     </item>
+    <layout class="QGridLayout" name="Convolution_btns" rowstretch="0" columnstretch="0">
+     <property name="spacing">
+      <number>0</number>
+     </property>
     </layout>
    </widget>
    <widget class="QPushButton" name="pushButton_MM">
@@ -233,7 +139,7 @@
    <widget class="QSlider" name="verticalSlider_Contrast">
     <property name="geometry">
      <rect>
-      <x>1570</x>
+      <x>1554</x>
       <y>620</y>
       <width>22</width>
       <height>160</height>
@@ -313,14 +219,27 @@
      <enum>Qt::Vertical</enum>
     </property>
    </widget>
+   <widget class="QLabel" name="label_out_2">
+    <property name="geometry">
+     <rect>
+      <x>619</x>
+      <y>55</y>
+      <width>693</width>
+      <height>604</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1844</width>
-     <height>22</height>
+     <width>1845</width>
+     <height>24</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFilters">
@@ -358,60 +277,96 @@
    <property name="text">
     <string>Negative</string>
    </property>
+   <property name="shortcut">
+    <string>N</string>
+   </property>
   </action>
   <action name="actionAverage_conversion">
    <property name="text">
     <string>By average</string>
+   </property>
+   <property name="shortcut">
+    <string>A</string>
    </property>
   </action>
   <action name="actionBy_brightness">
    <property name="text">
     <string>By brightness</string>
    </property>
+   <property name="shortcut">
+    <string>B</string>
+   </property>
   </action>
   <action name="actionBy_desaturation">
    <property name="text">
     <string>By desaturation</string>
+   </property>
+   <property name="shortcut">
+    <string>D</string>
    </property>
   </action>
   <action name="actionChannel_selection">
    <property name="text">
     <string>Channel selection</string>
    </property>
+   <property name="shortcut">
+    <string>C</string>
+   </property>
   </action>
   <action name="actionEmbos">
    <property name="text">
     <string>Embos</string>
+   </property>
+   <property name="shortcut">
+    <string>E</string>
    </property>
   </action>
   <action name="actionBox_blur">
    <property name="text">
     <string>Box blur</string>
    </property>
+   <property name="shortcut">
+    <string>Shift+B</string>
+   </property>
   </action>
   <action name="actionGaussian_blur">
    <property name="text">
     <string>Gaussian blur</string>
+   </property>
+   <property name="shortcut">
+    <string>G</string>
    </property>
   </action>
   <action name="actionLaplacian_filter">
    <property name="text">
     <string>Laplacian filter</string>
    </property>
+   <property name="shortcut">
+    <string>L</string>
+   </property>
   </action>
   <action name="actionSober_filter_left">
    <property name="text">
     <string>Sober left</string>
+   </property>
+   <property name="shortcut">
+    <string>S, 1</string>
    </property>
   </action>
   <action name="actionSober_filter_right">
    <property name="text">
     <string>Sober right</string>
    </property>
+   <property name="shortcut">
+    <string>S, 2</string>
+   </property>
   </action>
   <action name="actionSober_combined">
    <property name="text">
     <string>Sober combined</string>
+   </property>
+   <property name="shortcut">
+    <string>Shift+S</string>
    </property>
   </action>
  </widget>

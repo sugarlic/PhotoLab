@@ -12,19 +12,23 @@
 
 namespace s21 {
 class Model {
+  using pixel_mat = std::vector<std::vector<EasyBMP::RGBApixel>>;
+  using kernel_mat = std::vector<std::vector<double>>;
+
  public:
   Model(){};
   ~Model(){};
+  enum ColorChannel { kNone, kRed, kGreen, kBlue };
   void ReadImg(const std::string& img_name);
   QImage WriteImg();
-  void ChannelSelection(int red, int green, int blue);
+  void ChannelSelection(ColorChannel channel);
   void AverageConversion();
   void ConversionByBrightness();
   void ConversionByDesaturation();  // ????
   void Negative();
   void Convolution(const std::string& convolution_name);
   void SobelFilterCombin();
-  void ArbitraryMatrixMode(const std::vector<std::vector<double>>& matrix);
+  void ArbitraryMatrixMode(const kernel_mat& matrix);
   void BrightnessChange(float brightness);
   void ContrastChange(float contrast);
   void SaturationChange(float shade, float lightness, float saturation);
@@ -32,11 +36,14 @@ class Model {
   std::string GetFilename() { return filename_; }
 
  private:
+  void MatrixTransformation(const pixel_mat& img_matrix_,
+                            pixel_mat& filtered_matrix_,
+                            const kernel_mat& kernel);
   std::string filename_ = "";
-  std::vector<std::vector<EasyBMP::RGBApixel>> img_matrix_;
-  std::vector<std::vector<EasyBMP::RGBApixel>> filtered_matrix_;
-  // std::vector<std::vector<EasyBMP::RGBApixel>> interjacent_image_;
-  const std::map<std::string, std::vector<std::vector<double>>> kernel_map_{
+  pixel_mat img_matrix_;
+  pixel_mat filtered_matrix_;
+  // pixel_mat interjacent_image_;
+  const std::map<std::string, kernel_mat> kernel_map_{
       {"Original image", {{0, 0, 0}, {0, 1, 0}, {0, 0, 0}}},
       {"Embos", {{-2, -1, 0}, {-1, 1, 1}, {0, 1, 2}}},
       {"Sharpen", {{0, -1, 0}, {-1, 5, -1}, {0, -1, 0}}},

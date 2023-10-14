@@ -7,8 +7,8 @@ void Controler::ReadImg(const std::string &img_name) {
 
 QImage Controler::WriteImg() { return model_->WriteImg(); }
 
-void Controler::ChannelSelection(int red, int green, int blue) {
-  model_->ChannelSelection(red, green, blue);
+void Controler::ChannelSelection(Model::ColorChannel channel) {
+  model_->ChannelSelection(channel);
 }
 
 void Controler::AverageConversion() { model_->AverageConversion(); }

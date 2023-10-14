@@ -85,15 +85,15 @@ class CommandConvolution : public CommandBase {
 class CommandChannelSelection : public CommandBase {
  public:
   CommandChannelSelection(std::shared_ptr<Controler> controler,
-                          std::shared_ptr<QColor> color_storage)
-      : CommandBase(controler), color_storage_(color_storage) {}
+                          std::shared_ptr<Model::ColorChannel> channel)
+      : CommandBase(controler), channel_(channel) {}
   virtual void Execute() {
-    auto color = color_storage_ ? *color_storage_ : QColor();
-    controler_->ChannelSelection(color.red(), color.green(), color.blue());
+    auto channel = channel_ ? *channel_ : Model::kNone;
+    controler_->ChannelSelection(channel);
   };
 
  private:
-  std::shared_ptr<QColor> color_storage_;
+  std::shared_ptr<Model::ColorChannel> channel_;
 };
 }  // namespace s21
 #endif  // CONTROLER_COMMANDS_H

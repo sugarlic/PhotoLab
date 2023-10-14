@@ -6,14 +6,22 @@
 
 #include "controler_commands.h"
 namespace s21 {
-class ContolerButton : public QPushButton {
+class ControlerButton {
+ public:
+  ControlerButton(std::unique_ptr<CommandBase> command)
+      : command_(std::move(command)) {}
+
+ protected:
+  std::unique_ptr<CommandBase> command_;
+};
+class ControlerPushButton : public QPushButton, public ControlerButton {
   Q_OBJECT
  public:
-  ContolerButton(std::unique_ptr<CommandBase> command, const QString& text,
-                 QWidget* parent = nullptr)
-      : QPushButton(text, parent), command_(std::move(command)) {
-    if (!parent) return;
-    connect(this, &ContolerButton::clicked, this, &ContolerButton::Execute);
+  ControlerPushButton(std::unique_ptr<CommandBase> command, const QString& text,
+                      QWidget* parent = nullptr)
+      : QPushButton(text, parent), ControlerButton(std::move(command)) {
+    QPushButton::connect(this, &QPushButton::clicked, this,
+                         &ControlerPushButton::Execute);
   }
  signals:
   void Executed();
@@ -22,32 +30,22 @@ class ContolerButton : public QPushButton {
     command_->Execute();
     emit Executed();
   }
-
- protected:
-  std::unique_ptr<CommandBase> command_;
 };
-class ChannelSelectionButton : public ContolerButton {
+class ChannelSelectionButton : public ControlerPushButton {
   Q_OBJECT
  public:
   ChannelSelectionButton(std::unique_ptr<CommandChannelSelection> command,
-                         std::shared_ptr<QColor> color_storage,
+                         std::shared_ptr<Model::ColorChannel> channel,
                          const QString& text, QWidget* parent = nullptr)
-      : ContolerButton(std::move(command), text, parent),
-        color_storage_(color_storage) {
+      : ControlerPushButton(std::move(command), text, parent),
+        channel_(channel) {
     if (!parent) return;
-    connect(this, &ChannelSelectionButton::clicked, this,
-            &ChannelSelectionButton::Execute);
-  }
- public slots:
-  virtual void Execute() override {
-    *color_storage_ =
-        QColorDialog::getColor(*color_storage_, this, "Select color channel");
-    command_->Execute();
-    emit Executed();
+    QPushButton::connect(this, &ChannelSelectionButton::clicked, this,
+                         &ChannelSelectionButton::Execute);
   }
 
  private:
-  std::shared_ptr<QColor> color_storage_;
+  std::shared_ptr<Model::ColorChannel> channel_;
 };
 }  // namespace s21
 

@@ -2,7 +2,8 @@
 
 #include <fstream>
 
-void s21::Model::ReadImg(const std::string &img_name) {
+namespace s21 {
+void Model::ReadImg(const std::string &img_name) {
   std::ifstream file(img_name);
   if (!file.is_open()) return;
   filename_ = img_name;
@@ -10,8 +11,7 @@ void s21::Model::ReadImg(const std::string &img_name) {
   img.ReadFromFile(img_name.c_str());
   int width = img.TellWidth();
   int height = img.TellHeight();
-  std::vector<std::vector<EasyBMP::RGBApixel>> help_matrix(
-      height, std::vector<EasyBMP::RGBApixel>(width));
+  pixel_mat help_matrix(height, std::vector<EasyBMP::RGBApixel>(width));
 
   for (int i = 0; i < height; i++) {
     for (int j = 0; j < width; j++) {
@@ -26,7 +26,7 @@ void s21::Model::ReadImg(const std::string &img_name) {
   filtered_matrix_ = img_matrix_;
 }
 
-QImage s21::Model::WriteImg() {
+QImage Model::WriteImg() {
   if (img_matrix_.empty()) return QImage();
   BMP output_img;
   output_img.SetSize(img_matrix_[0].size(), img_matrix_.size());
@@ -37,20 +37,23 @@ QImage s21::Model::WriteImg() {
   return CreateQimage(output_img);
 }
 
-void s21::Model::ChannelSelection(int red, int green, int blue) {
+void Model::ChannelSelection(ColorChannel channel) {
+  if (channel == kNone) return;
   for (size_t i = 0; i < img_matrix_.size(); i++) {
     for (size_t j = 0; j < img_matrix_[0].size(); j++) {
-      auto &pixel = filtered_matrix_[i][j];
-      pixel.Red = red;
-      pixel.Green = green;
-      pixel.Blue = blue;
+      auto &filter_px = filtered_matrix_[i][j];
+      auto &img_px = img_matrix_[i][j];
+      auto value = channel == kRed     ? img_px.Red
+                   : channel == kGreen ? img_px.Green
+                                       : img_px.Blue;
+      filter_px.Red = filter_px.Green = filter_px.Blue = value;
     }
   }
 }
 
 // Simple Filtrs
 
-void s21::Model::AverageConversion() {
+void Model::AverageConversion() {
   for (size_t i = 0; i < img_matrix_.size(); i++) {
     for (size_t j = 0; j < img_matrix_[0].size(); j++) {
       auto &filter_px = filtered_matrix_[i][j];
@@ -64,7 +67,7 @@ void s21::Model::AverageConversion() {
   }
 }
 
-void s21::Model::ConversionByBrightness() {
+void Model::ConversionByBrightness() {
   for (size_t i = 0; i < img_matrix_.size(); i++) {
     for (size_t j = 0; j < img_matrix_[0].size(); j++) {
       auto &filter_px = filtered_matrix_[i][j];
@@ -78,22 +81,20 @@ void s21::Model::ConversionByBrightness() {
   }
 }
 
-void s21::Model::ConversionByDesaturation() {
+void Model::ConversionByDesaturation() {
   for (size_t i = 0; i < img_matrix_.size(); i++) {
     for (size_t j = 0; j < img_matrix_[0].size(); j++) {
-      auto img_px = img_matrix_[i][j];
-      double blue = img_px.Blue;
-      double red = img_px.Red;
-      double green = img_px.Green;
-
-      filtered_matrix_[i][j].Red = (std::fmin(red, std::fmin(blue, green)) +
-                                    std::fmax(red, std::fmax(blue, green))) /
-                                   2;
+      auto &img_px = img_matrix_[i][j];
+      auto &filter_px = filtered_matrix_[i][j];
+      auto value = (std::min({img_px.Red, img_px.Blue, img_px.Green}) +
+                    std::max({img_px.Red, img_px.Blue, img_px.Green})) /
+                   2;
+      filter_px.Red = filter_px.Green = filter_px.Blue = value;
     }
   }
 }
 
-void s21::Model::Negative() {
+void Model::Negative() {
   for (size_t i = 0; i < img_matrix_.size(); i++) {
     for (size_t j = 0; j < img_matrix_[0].size(); j++) {
       auto &filter_px = filtered_matrix_[i][j];
@@ -107,10 +108,9 @@ void s21::Model::Negative() {
 
 // Convolution
 
-void MatrixTransformation(
-    const std::vector<std::vector<EasyBMP::RGBApixel>> &img_matrix_,
-    std::vector<std::vector<EasyBMP::RGBApixel>> &filtered_matrix_,
-    const std::vector<std::vector<double>> &kernel) {
+void Model::MatrixTransformation(const pixel_mat &img_matrix_,
+                                 pixel_mat &filtered_matrix_,
+                                 const kernel_mat &kernel) {
   int row_right_limit = !(kernel.size() == 2);
   int column_right_limit = !(kernel[0].size() == 2);
   int img_rows = img_matrix_.size();
@@ -139,19 +139,16 @@ void MatrixTransformation(
   }
 }
 
-void s21::Model::Convolution(const std::string &convolution_name) {
+void Model::Convolution(const std::string &convolution_name) {
   if (kernel_map_.find(convolution_name) == kernel_map_.end() ||
       img_matrix_.empty())
     return;
-  std::vector<std::vector<double>> kernel =
-      (*kernel_map_.find(convolution_name)).second;
+  kernel_mat kernel = (*kernel_map_.find(convolution_name)).second;
   MatrixTransformation(img_matrix_, filtered_matrix_, kernel);
 }
 
-void s21::Model::SobelFilterCombin() {
+void Model::SobelFilterCombin() {
   if (img_matrix_.empty()) return;
-  using pixel_mat = std::vector<std::vector<EasyBMP::RGBApixel>>;
-  using double_mat = std::vector<std::vector<double>>;
   pixel_mat sobel_filter_left(
       img_matrix_.size(),
       std::vector<EasyBMP::RGBApixel>(img_matrix_[0].size()));
@@ -159,8 +156,8 @@ void s21::Model::SobelFilterCombin() {
       img_matrix_.size(),
       std::vector<EasyBMP::RGBApixel>(img_matrix_[0].size()));
 
-  double_mat left_kernel = (*kernel_map_.find("Sobel filter left")).second;
-  double_mat right_kernel = (*kernel_map_.find("Sobel filter right")).second;
+  kernel_mat left_kernel = (*kernel_map_.find("Sobel filter left")).second;
+  kernel_mat right_kernel = (*kernel_map_.find("Sobel filter right")).second;
 
   MatrixTransformation(img_matrix_, sobel_filter_left, left_kernel);
   MatrixTransformation(img_matrix_, sobel_filter_right, right_kernel);
@@ -170,20 +167,19 @@ void s21::Model::SobelFilterCombin() {
       auto &filter_px = filtered_matrix_[i][j];
       auto &sob_right_px = sobel_filter_right[i][j];
       auto &sob_left_px = sobel_filter_left[i][j];
-      filter_px.Red = sob_left_px.Red + sob_left_px.Red;
-      filter_px.Green = sob_left_px.Green + sob_left_px.Green;
-      filter_px.Blue = sob_left_px.Blue + sob_left_px.Blue;
+      filter_px.Red = sob_left_px.Red + sob_right_px.Red;
+      filter_px.Green = sob_left_px.Green + sob_right_px.Green;
+      filter_px.Blue = sob_left_px.Blue + sob_right_px.Blue;
     }
   }
 }
 
-void s21::Model::ArbitraryMatrixMode(
-    const std::vector<std::vector<double>> &matrix) {
+void Model::ArbitraryMatrixMode(const kernel_mat &matrix) {
   if (!img_matrix_.empty())
     MatrixTransformation(img_matrix_, filtered_matrix_, matrix);
 }
 
-QImage s21::Model::CreateQimage(BMP bmp_image) {
+QImage Model::CreateQimage(BMP bmp_image) {
   int width = bmp_image.TellWidth();
   int height = bmp_image.TellHeight();
 
@@ -199,7 +195,7 @@ QImage s21::Model::CreateQimage(BMP bmp_image) {
   return qImage;
 }
 
-void s21::Model::BrightnessChange(float brightness) {
+void Model::BrightnessChange(float brightness) {
   if (img_matrix_.empty()) return;
   filtered_matrix_ = img_matrix_;
   for (size_t i = 0; i < filtered_matrix_.size(); i++)
@@ -211,7 +207,7 @@ void s21::Model::BrightnessChange(float brightness) {
     }
 }
 
-void s21::Model::ContrastChange(float contrast) {
+void Model::ContrastChange(float contrast) {
   if (img_matrix_.empty()) return;
   filtered_matrix_ = img_matrix_;
   for (size_t i = 0; i < filtered_matrix_.size(); i++)
@@ -225,17 +221,16 @@ void s21::Model::ContrastChange(float contrast) {
     }
 }
 
-void s21::Model::SaturationChange(float shade, float lightness,
-                                  float saturation) {
+void Model::SaturationChange(float shade, float lightness, float saturation) {
   if (img_matrix_.empty()) return;
   filtered_matrix_ = img_matrix_;
-  for (int i = 0; i < filtered_matrix_.size(); i++)
-    for (int j = 0; j < filtered_matrix_[0].size(); j++) {
+  for (size_t i = 0; i < filtered_matrix_.size(); i++)
+    for (size_t j = 0; j < filtered_matrix_[0].size(); j++) {
       auto &pixel = filtered_matrix_[i][j];
       float h, s, l;
-      float r{static_cast<float>(pixel.Red / 255)};
-      float g{static_cast<float>(pixel.Green / 255)};
-      float b{static_cast<float>(pixel.Blue / 255)};
+      float r = pixel.Red / 255.f;
+      float g = pixel.Green / 255.f;
+      float b = pixel.Blue / 255.f;
       RGBtoHSL(r, g, b, h, s, l);
 
       h = std::clamp<float>(h * shade, 0, 360);
@@ -250,22 +245,21 @@ void s21::Model::SaturationChange(float shade, float lightness,
     }
 }
 
-void s21::Model::Restart() { filtered_matrix_ = img_matrix_; }
+void Model::Restart() { filtered_matrix_ = img_matrix_; }
 
-void s21::Model::RGBtoHSL(float r, float g, float b, float &h, float &s,
-                          float &l) {
-  float maxVal = std::max(std::max(r, g), b);
-  float minVal = std::min(std::min(r, g), b);
+void Model::RGBtoHSL(float r, float g, float b, float &h, float &s, float &l) {
+  const float &maxVal = std::max({r, g, b});
+  const float &minVal = std::min({r, g, b});
 
   float delta = maxVal - minVal;
 
   if (delta == 0) {
     h = 0;
-  } else if (maxVal == r) {
+  } else if (&maxVal == &r) {
     h = 60 * std::fmod((g - b) / delta, 6);
-  } else if (maxVal == g) {
+  } else if (&maxVal == &g) {
     h = 60 * ((b - r) / delta + 2);
-  } else if (maxVal == b) {
+  } else if (&maxVal == &b) {
     h = 60 * ((r - g) / delta + 4);
   }
 
@@ -278,8 +272,7 @@ void s21::Model::RGBtoHSL(float r, float g, float b, float &h, float &s,
   }
 }
 
-void s21::Model::HSLtoRGB(float h, float s, float l, float &r, float &g,
-                          float &b) {
+void Model::HSLtoRGB(float h, float s, float l, float &r, float &g, float &b) {
   if (s == 0) {
     r = g = b = l;
   } else {
@@ -293,7 +286,7 @@ void s21::Model::HSLtoRGB(float h, float s, float l, float &r, float &g,
   }
 }
 
-float s21::Model::HueToRGB(float p, float q, float t) {
+float Model::HueToRGB(float p, float q, float t) {
   if (t < 0) t += 1;
   if (t > 1) t -= 1;
   if (t < 1 / 6.0) return p + (q - p) * 6 * t;
@@ -301,3 +294,4 @@ float s21::Model::HueToRGB(float p, float q, float t) {
   if (t < 2 / 3.0) return p + (q - p) * (2 / 3.0 - t) * 6;
   return p;
 }
+}  // namespace s21
