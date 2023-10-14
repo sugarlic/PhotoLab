@@ -34,7 +34,7 @@ void MainWindow::UpdateImage() {
 }
 
 void MainWindow::RequestFileName() {
-  ui->label_fname->setText(controler_->GetFilename().c_str());
+  // ui->label_fname->setText(controler_->GetFilename().c_str());
 }
 
 void MainWindow::RequestImageSource() {

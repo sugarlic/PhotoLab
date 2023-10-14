@@ -123,7 +123,7 @@ void MatrixTransformation(
       for (int k = -1; k <= row_right_limit; k++) {
         for (int l = -1; l <= column_right_limit; l++) {
           int row = std::clamp<int>(i + k, 0, img_rows - 1);
-          int col = std::clamp<int>(j + k, 0, img_cols - 1);
+          int col = std::clamp<int>(j + l, 0, img_cols - 1);
           auto img_px = img_matrix_[row][col];
           auto kernel_val = kernel[k + 1][l + 1];
           red += img_px.Red * kernel_val;
@@ -204,12 +204,10 @@ void s21::Model::BrightnessChange(float brightness) {
   filtered_matrix_ = img_matrix_;
   for (size_t i = 0; i < filtered_matrix_.size(); i++)
     for (size_t j = 0; j < filtered_matrix_[0].size(); j++) {
-      filtered_matrix_[i][j].Red =
-          std::clamp<float>(filtered_matrix_[i][j].Red * brightness, 0, 255);
-      filtered_matrix_[i][j].Blue =
-          std::clamp<float>(filtered_matrix_[i][j].Blue * brightness, 0, 255);
-      filtered_matrix_[i][j].Green =
-          std::clamp<float>(filtered_matrix_[i][j].Green * brightness, 0, 255);
+      auto &pixel = filtered_matrix_[i][j];
+      pixel.Red = std::clamp<float>(pixel.Red * brightness, 0, 255);
+      pixel.Blue = std::clamp<float>(pixel.Blue * brightness, 0, 255);
+      pixel.Green = std::clamp<float>(pixel.Green * brightness, 0, 255);
     }
 }
 
@@ -218,12 +216,12 @@ void s21::Model::ContrastChange(float contrast) {
   filtered_matrix_ = img_matrix_;
   for (size_t i = 0; i < filtered_matrix_.size(); i++)
     for (size_t j = 0; j < filtered_matrix_[0].size(); j++) {
-      filtered_matrix_[i][j].Red = std::clamp<float>(
-          (filtered_matrix_[i][j].Red - 128) * contrast + 128, 0, 255);
-      filtered_matrix_[i][j].Blue = std::clamp<float>(
-          (filtered_matrix_[i][j].Blue - 128) * contrast + 128, 0, 255);
-      filtered_matrix_[i][j].Green = std::clamp<float>(
-          (filtered_matrix_[i][j].Green - 128) * contrast + 128, 0, 255);
+      auto &pixel = filtered_matrix_[i][j];
+      pixel.Red = std::clamp<float>((pixel.Red - 128) * contrast + 128, 0, 255);
+      pixel.Blue =
+          std::clamp<float>((pixel.Blue - 128) * contrast + 128, 0, 255);
+      pixel.Green =
+          std::clamp<float>((pixel.Green - 128) * contrast + 128, 0, 255);
     }
 }
 
@@ -233,10 +231,11 @@ void s21::Model::SaturationChange(float shade, float lightness,
   filtered_matrix_ = img_matrix_;
   for (int i = 0; i < filtered_matrix_.size(); i++)
     for (int j = 0; j < filtered_matrix_[0].size(); j++) {
+      auto &pixel = filtered_matrix_[i][j];
       float h, s, l;
-      float r{static_cast<float>(filtered_matrix_[i][j].Red / 255)};
-      float g{static_cast<float>(filtered_matrix_[i][j].Green / 255)};
-      float b{static_cast<float>(filtered_matrix_[i][j].Blue / 255)};
+      float r{static_cast<float>(pixel.Red / 255)};
+      float g{static_cast<float>(pixel.Green / 255)};
+      float b{static_cast<float>(pixel.Blue / 255)};
       RGBtoHSL(r, g, b, h, s, l);
 
       h = std::clamp<float>(h * shade, 0, 360);
@@ -245,9 +244,9 @@ void s21::Model::SaturationChange(float shade, float lightness,
 
       HSLtoRGB(h, s, l, r, g, b);
 
-      filtered_matrix_[i][j].Red = std::clamp<float>(r * 255, 0, 255);
-      filtered_matrix_[i][j].Green = std::clamp<float>(g * 255, 0, 255);
-      filtered_matrix_[i][j].Blue = std::clamp<float>(b * 255, 0, 255);
+      pixel.Red = std::clamp<float>(r * 255, 0, 255);
+      pixel.Green = std::clamp<float>(g * 255, 0, 255);
+      pixel.Blue = std::clamp<float>(b * 255, 0, 255);
     }
 }
 
