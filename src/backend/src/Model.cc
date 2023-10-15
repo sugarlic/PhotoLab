@@ -38,7 +38,10 @@ QImage Model::WriteImg() {
 }
 QImage Model::GetSource() { return QImage(filename_.c_str(), ".bmp"); };
 void Model::ChannelSelection(ColorChannel channel) {
-  if (channel == kNone) return;
+  if (channel == kNone) {
+    filtered_matrix_ = img_matrix_;
+    return;
+  }
   for (size_t i = 0; i < img_matrix_.size(); i++) {
     for (size_t j = 0; j < img_matrix_[0].size(); j++) {
       auto &filter_px = filtered_matrix_[i][j];

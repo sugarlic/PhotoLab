@@ -30,6 +30,7 @@ class MainWindow : public QMainWindow {
   void UpdateImage();
   void RequestFileName();
   void RequestImageSource();
+  void SelectColorChannel();
   void on_pushButton_MM_clicked();
   void on_verticalSlider_Brightness_valueChanged(int value);
   void on_verticalSlider_Contrast_valueChanged(int value);

@@ -4,10 +4,9 @@
 #include <QDir>
 #include <QFile>
 #include <QFileDialog>
+#include <QProxyStyle>
+#include <QStyleOptionTab>
 #include <filesystem>
-
-
-
 MainWindow::MainWindow(std::shared_ptr<s21::Controler> controler,
                        QWidget *parent)
     : QMainWindow(parent),
@@ -46,6 +45,16 @@ void MainWindow::RequestImageSource() {
   ui->Source_Image_L->setPixmap(map);
 }
 
+void MainWindow::SelectColorChannel() {
+  auto but = (QRadioButton *)(sender());
+  s21::Model::ColorChannel channel = s21::Model::kNone;
+  if (but == ui->ChannelNone_B) channel = s21::Model::kNone;
+  if (but == ui->ChannelRed_B) channel = s21::Model::kRed;
+  if (but == ui->ChannelGreen_B) channel = s21::Model::kGreen;
+  if (but == ui->ChannelBlue_B) channel = s21::Model::kBlue;
+  controler_->ChannelSelection(channel);
+}
+
 void MainWindow::SetupView() {
   using ctrl_btn_vec = std::vector<std::shared_ptr<s21::ControlerPushButton>>;
   ctrl_btn_vec buttons;
@@ -57,6 +66,12 @@ void MainWindow::SetupView() {
     connect(act, &QAction::triggered, but.get(), &QPushButton::click);
     arr.push_back(but);
   };
+
+  for (auto but : ui->ChannelButtons->buttons()) {
+    connect(but, &QRadioButton::clicked, this, &MainWindow::SelectColorChannel);
+    connect(but, &QRadioButton::clicked, this, &MainWindow::UpdateImage);
+  }
+
   connect_to_action(
       ui->actionNegative,
       CreateControlerBtn(new s21::CommandNegative(controler_), "Negative"),
@@ -81,18 +96,17 @@ void MainWindow::SetupView() {
       CreateControlerBtn(new s21::CommandSobelFilterCombin(controler_),
                          "Sobel filter combin"),
       buttons);
-  // connect_to_action(ui->action, CreateControlerBtn(new
-  // s21::CommandNegative(controler_), "Negative"));
-  buttons.push_back(
-      CreateControlerBtn(new s21::CommandRestart(controler_), "Reset filters"));
+
   connect_to_action(
       ui->actionEmbos,
       CreateControlerBtn(new s21::CommandConvolution(controler_, "Embos"),
                          "Embos"),
       convolution_buttons);
-  // connect_to_action(ui->action, CreateControlerBtn(new
-  // s21::CommandConvolution(controler_, "Sharpen"), "Sharpen"),
-  // convolution_buttons);
+  connect_to_action(
+      ui->actionSharpen,
+      CreateControlerBtn(new s21::CommandConvolution(controler_, "Sharpen"),
+                         "Sharpen"),
+      convolution_buttons);
   connect_to_action(
       ui->actionBox_blur,
       CreateControlerBtn(new s21::CommandConvolution(controler_, "Box blur"),
@@ -118,6 +132,12 @@ void MainWindow::SetupView() {
                                            controler_, "Sobel filter right"),
                                        "Sobel filter right"),
                     convolution_buttons);
+  auto reset_but1 =
+      CreateControlerBtn(new s21::CommandRestart(controler_), "Reset filters");
+  auto reset_but2 =
+      CreateControlerBtn(new s21::CommandRestart(controler_), "Reset filters");
+  auto reset_but3 =
+      CreateControlerBtn(new s21::CommandRestart(controler_), "Reset filters");
 
   // auto color_container = std::make_shared<QColor>();
   // auto color_command = std::make_unique<s21::CommandChannelSelection>(
@@ -138,12 +158,17 @@ void MainWindow::SetupView() {
           &MainWindow::RequestFileName);
   connect(open_button.get(), &s21::ControlerPushButton::Executed, this,
           &MainWindow::RequestImageSource);
-  buttons.push_back(save_button);
-  buttons.push_back(open_button);
-
+  auto matrix_but = ui->Main_Buttons->itemAt(0)->widget();
+  ui->Main_Buttons->removeWidget(matrix_but);
+  ui->Main_Buttons->addWidget(open_button.get(), 0, 0);
+  ui->Main_Buttons->addWidget(save_button.get(), 1, 0);
+  ui->Main_Buttons->addWidget(matrix_but, 2, 0);
+  ui->Main_Buttons->addWidget(reset_but1.get(), 3, 0);
   for (auto &but : buttons) ui->Controler_btns->addWidget(but.get());
   for (auto &but : convolution_buttons)
     ui->Convolution_btns->addWidget(but.get());
+  ui->Convolution_btns->addWidget(reset_but2.get());
+  ui->Controler_btns->addWidget(reset_but3.get());
 }
 
 std::shared_ptr<s21::ControlerPushButton> MainWindow::CreateControlerBtn(
