@@ -27,6 +27,7 @@ class CommandWithValueBase : public CommandBase {
  public:
   using CommandBase::CommandBase;
   using ValueType = T;
+  void Execute() override{};
   virtual void Execute(ValueType value) = 0;
 
  protected:
@@ -97,23 +98,47 @@ class CommandConvolution : public CommandBase {
  private:
   std::string convolution_name_;
 };
-class CommandBrightnessChange : public CommandWithValueBase<float> {
+class CommandChangeBrightness : public CommandWithValueBase<float> {
  public:
-  using CommandWithValueBase::CommandBase;
+  CommandChangeBrightness(std::shared_ptr<Controler> controler)
+      : CommandWithValueBase(controler){};
   void Execute(ValueType value) override {
-    controler_->BrightnessChange(value);
+    controler_->ChangeBrightness(value);
   }
 };
-class CommandContrastChange : public CommandWithValueBase<float> {
+class CommandChangeContrast : public CommandWithValueBase<float> {
  public:
-  using CommandWithValueBase::CommandBase;
-  void Execute(ValueType value) override { controler_->ContrastChange(value); }
-};
-class CommandSaturationChange : public CommandWithValueBase<float[3]> {
- public:
-  using CommandWithValueBase::CommandBase;
+  CommandChangeContrast(std::shared_ptr<Controler> controler)
+      : CommandWithValueBase(controler){};
   void Execute(ValueType value) override {
-    controler_->SaturationChange(value[0], value[1], value[2]);
+    controler_->ChangeContrast(value_ = value);
+  }
+};
+class CommandSetShade : public CommandWithValueBase<float> {
+ public:
+  CommandSetShade(std::shared_ptr<Controler> controler)
+      : CommandWithValueBase(controler){};
+  void Execute(ValueType value) override {
+    controler_->SetShade(value_ = value);
+    controler_->ChangeSaturation();
+  }
+};
+class CommandSetLightness : public CommandWithValueBase<float> {
+ public:
+  CommandSetLightness(std::shared_ptr<Controler> controler)
+      : CommandWithValueBase(controler){};
+  void Execute(ValueType value) override {
+    controler_->SetLightness(value_ = value);
+    controler_->ChangeSaturation();
+  }
+};
+class CommandSetSaturation : public CommandWithValueBase<float> {
+ public:
+  CommandSetSaturation(std::shared_ptr<Controler> controler)
+      : CommandWithValueBase(controler){};
+  void Execute(ValueType value) override {
+    controler_->SetSaturation(value_ = value);
+    controler_->ChangeSaturation();
   }
 };
 }  // namespace s21

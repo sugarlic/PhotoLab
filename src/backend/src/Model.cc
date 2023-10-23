@@ -226,7 +226,19 @@ void Model::ChangeContrast(float contrast) {
     }
 }
 
-void Model::ChangeSaturation(float shade, float lightness, float saturation) {
+void Model::SetShade(float shade) {
+  shade_ = shade;
+}
+
+void Model::SetLightness(float lightness) {
+  lightness_ = lightness;
+}
+
+void Model::SetSaturation(float saturation) {
+  saturation_ = saturation;
+}
+
+void Model::ChangeSaturation() {
   if (img_matrix_.empty()) return;
   filtered_matrix_ = img_matrix_;
   for (size_t i = 0; i < filtered_matrix_.size(); i++)
@@ -238,9 +250,9 @@ void Model::ChangeSaturation(float shade, float lightness, float saturation) {
       float b = pixel.Blue / 255.f;
       RGBtoHSL(r, g, b, h, s, l);
 
-      h = std::clamp<float>(h * shade, 0, 360);
-      s = std::clamp<float>(s * saturation, 0, 1);
-      l = std::clamp<float>(l * lightness, 0, 1);
+      h = std::clamp<float>(h * shade_, 0, 360);
+      s = std::clamp<float>(s * saturation_, 0, 1);
+      l = std::clamp<float>(l * lightness_, 0, 1);
 
       HSLtoRGB(h, s, l, r, g, b);
 

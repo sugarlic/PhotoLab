@@ -145,6 +145,17 @@ void MainWindow::SetupView() {
           &MainWindow::RequestFileName);
   connect(open_button.get(), &ControlerPushButton::Executed, this,
           &MainWindow::RequestImageSource);
+  auto slider =
+      CreateControlerSlider(new CommandSetSaturation(controler_)).get();
+  slider->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Expanding);
+  ui->HSL_Grid->addWidget(slider, 1, 0);
+  slider = CreateControlerSlider(new CommandSetLightness(controler_)).get();
+  slider->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Expanding);
+  ui->HSL_Grid->addWidget(slider, 1, 1);
+  slider = CreateControlerSlider(new CommandSetShade(controler_)).get();
+  slider->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Expanding);
+  ui->HSL_Grid->addWidget(slider, 1, 2);
+
   auto matrix_but = ui->Main_Buttons->itemAt(0)->widget();
   ui->Main_Buttons->removeWidget(matrix_but);
   ui->Main_Buttons->addWidget(open_button.get(), 0, 0);
@@ -168,29 +179,14 @@ std::shared_ptr<ControlerPushButton> MainWindow::CreateControlerBtn(
   controler_btns_.push_back(btn_ptr);
   return btn_ptr;
 }
-
-void MainWindow::on_verticalSlider_Brightness_valueChanged(int value) {
-  controler_->BrightnessChange(static_cast<float>(value) / 100);
-  UpdateImage();
-}
-
-void MainWindow::on_verticalSlider_Contrast_valueChanged(int value) {
-  controler_->ContrastChange(static_cast<float>(value) / 100);
-  UpdateImage();
-}
-
-void MainWindow::on_verticalSlider_HSL_valueChanged(int value) {
-  controler_->SaturationChange(1, 1, static_cast<float>(value) / 100);
-  UpdateImage();
-}
-
-void MainWindow::on_verticalSlider_Lightness_valueChanged(int value) {
-  controler_->SaturationChange(1, static_cast<float>(value) / 100, 1);
-  UpdateImage();
-}
-
-void MainWindow::on_verticalSlider_Shade_valueChanged(int value) {
-  controler_->SaturationChange(static_cast<float>(value) / 100, 1, 1);
-  UpdateImage();
+std::shared_ptr<ControlerSlider> MainWindow::CreateControlerSlider(
+    CommandWithValueBase<float> *command, float delimeter) {
+  auto command_ptr = std::unique_ptr<CommandWithValueBase<float>>(command);
+  auto slider_ptr = std::make_shared<ControlerSlider>(std::move(command_ptr),
+                                                      delimeter, this);
+  connect(slider_ptr.get(), &ControlerSlider::Executed, this,
+          &MainWindow::UpdateImage);
+  controler_sliders_.push_back(slider_ptr);
+  return slider_ptr;
 }
 }  // namespace s21

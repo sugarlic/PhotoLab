@@ -7,6 +7,7 @@
 
 #include "controler.h"
 #include "controler_button.h"
+#include "controler_slider.h"
 #include "matrix_mode.h"
 
 QT_BEGIN_NAMESPACE
@@ -20,8 +21,7 @@ class MainWindow : public QMainWindow {
   Q_OBJECT
 
  public:
-  MainWindow(std::shared_ptr<s21::Controler> controler,
-             QWidget* parent = nullptr);
+  MainWindow(std::shared_ptr<Controler> controler, QWidget* parent = nullptr);
   ~MainWindow();
 
  public slots:
@@ -33,25 +33,20 @@ class MainWindow : public QMainWindow {
   void RequestImageSource();
   void SelectColorChannel();
   void on_pushButton_MM_clicked();
-  void on_verticalSlider_Brightness_valueChanged(int value);
-  void on_verticalSlider_Contrast_valueChanged(int value);
-
-  void on_verticalSlider_HSL_valueChanged(int value);
-
-  void on_verticalSlider_Lightness_valueChanged(int value);
-
-  void on_verticalSlider_Shade_valueChanged(int value);
 
  private:
   ::Ui::MainWindow* ui;
 
   std::shared_ptr<MatrixMode> window_;
-  std::shared_ptr<s21::Controler> controler_;
-  std::vector<std::shared_ptr<s21::ControlerPushButton>> controler_btns_;
+  std::shared_ptr<Controler> controler_;
+  std::vector<std::shared_ptr<ControlerPushButton>> controler_btns_;
+  std::vector<std::shared_ptr<ControlerSlider>> controler_sliders_;
   QString filename_;
   void SetupView();
-  std::shared_ptr<s21::ControlerPushButton> CreateControlerBtn(
-      s21::CommandBase* command, const QString& text);
+  std::shared_ptr<ControlerPushButton> CreateControlerBtn(CommandBase* command,
+                                                          const QString& text);
+  std::shared_ptr<ControlerSlider> CreateControlerSlider(
+      CommandWithValueBase<float>* command, float delimeter = 100);
   void resizeEvent(QResizeEvent* event) override {
     auto l1 = ui->Source_Image_L;
     auto l2 = ui->Filtered_Image_L;

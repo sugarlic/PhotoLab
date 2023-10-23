@@ -20,9 +20,12 @@ class Controler {
   void Convolution(const std::string &convolution_name);
   void SobelFilterCombin();
   void ArbitraryMatrixMode(const std::vector<std::vector<double>> &matrix);
-  void BrightnessChange(float brightness);
-  void ContrastChange(float contrast);
-  void SaturationChange(float shade, float lightness, float saturation);
+  void ChangeBrightness(float brightness);
+  void ChangeContrast(float contrast);
+  void ChangeSaturation();
+  void SetShade(float shade) { model_->SetShade(shade); }
+  void SetLightness(float lightness) { model_->SetLightness(lightness); }
+  void SetSaturation(float saturation) { model_->SetSaturation(saturation); }
   void Restart();
   void Toning();
   std::string GetFilename() { return model_->GetFilename(); }

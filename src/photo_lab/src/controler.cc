@@ -32,18 +32,15 @@ void Controler::ArbitraryMatrixMode(
   model_->ArbitraryMatrixMode(matrix);
 }
 
-void Controler::BrightnessChange(float brightness) {
+void Controler::ChangeBrightness(float brightness) {
   model_->ChangeBrightness(brightness);
 }
 
-void Controler::ContrastChange(float contrast) {
+void Controler::ChangeContrast(float contrast) {
   model_->ChangeContrast(contrast);
 }
 
-void Controler::SaturationChange(float shade, float lightness,
-                                 float saturation) {
-  model_->ChangeSaturation(shade, lightness, saturation);
-}
+void Controler::ChangeSaturation() { model_->ChangeSaturation(); }
 
 void Controler::Restart() { model_->Restart(); }
 void Controler::Toning() { model_->Toning(); }

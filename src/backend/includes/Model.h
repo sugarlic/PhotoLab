@@ -32,7 +32,10 @@ class Model {
   void ArbitraryMatrixMode(const kernel_mat& matrix);
   void ChangeBrightness(float brightness);
   void ChangeContrast(float contrast);
-  void ChangeSaturation(float shade, float lightness, float saturation);
+  void SetShade(float shade);
+  void SetLightness(float lightness);
+  void SetSaturation(float saturation);
+  void ChangeSaturation();
   void Toning();
   void Restart();
   std::string GetFilename() { return filename_; }
@@ -44,6 +47,9 @@ class Model {
   std::string filename_ = "";
   pixel_mat img_matrix_;
   pixel_mat filtered_matrix_;
+  float shade_{1};
+  float lightness_{1};
+  float saturation_{1};
   // pixel_mat interjacent_image_;
   const std::map<std::string, kernel_mat> kernel_map_{
       {"Original image", {{0, 0, 0}, {0, 1, 0}, {0, 0, 0}}},
