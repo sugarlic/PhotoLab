@@ -15,6 +15,7 @@ class MainWindow;
 }
 QT_END_NAMESPACE
 #include "ui_mainwindow.h"
+namespace s21 {
 class MainWindow : public QMainWindow {
   Q_OBJECT
 
@@ -42,7 +43,7 @@ class MainWindow : public QMainWindow {
   void on_verticalSlider_Shade_valueChanged(int value);
 
  private:
-  Ui::MainWindow* ui;
+  ::Ui::MainWindow* ui;
 
   std::shared_ptr<MatrixMode> window_;
   std::shared_ptr<s21::Controler> controler_;
@@ -61,5 +62,6 @@ class MainWindow : public QMainWindow {
     QMainWindow::resizeEvent(event);
   }
 };
+}  // namespace s21
 
 #endif  // MAINWINDOW_H

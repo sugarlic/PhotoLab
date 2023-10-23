@@ -15,7 +15,7 @@ class Controler {
   void ChannelSelection(Model::ColorChannel channel);
   void AverageConversion();
   void ConversionByBrightness();
-  void ConversionByDesaturation();  // ????
+  void ConversionByDesaturation();
   void Negative();
   void Convolution(const std::string &convolution_name);
   void SobelFilterCombin();

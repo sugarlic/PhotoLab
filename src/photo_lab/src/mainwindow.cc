@@ -7,10 +7,10 @@
 #include <QProxyStyle>
 #include <QStyleOptionTab>
 #include <filesystem>
-MainWindow::MainWindow(std::shared_ptr<s21::Controler> controler,
-                       QWidget *parent)
+namespace s21 {
+MainWindow::MainWindow(std::shared_ptr<Controler> controler, QWidget *parent)
     : QMainWindow(parent),
-      ui(new Ui::MainWindow),
+      ui(new ::Ui::MainWindow),
       window_(new MatrixMode),
       controler_{controler} {
   ui->setupUi(this);
@@ -47,21 +47,21 @@ void MainWindow::RequestImageSource() {
 
 void MainWindow::SelectColorChannel() {
   auto but = (QRadioButton *)(sender());
-  s21::Model::ColorChannel channel = s21::Model::kNone;
-  if (but == ui->ChannelNone_B) channel = s21::Model::kNone;
-  if (but == ui->ChannelRed_B) channel = s21::Model::kRed;
-  if (but == ui->ChannelGreen_B) channel = s21::Model::kGreen;
-  if (but == ui->ChannelBlue_B) channel = s21::Model::kBlue;
+  Model::ColorChannel channel = Model::kNone;
+  if (but == ui->ChannelNone_B) channel = Model::kNone;
+  if (but == ui->ChannelRed_B) channel = Model::kRed;
+  if (but == ui->ChannelGreen_B) channel = Model::kGreen;
+  if (but == ui->ChannelBlue_B) channel = Model::kBlue;
   controler_->ChannelSelection(channel);
 }
 
 void MainWindow::SetupView() {
-  using ctrl_btn_vec = std::vector<std::shared_ptr<s21::ControlerPushButton>>;
+  using ctrl_btn_vec = std::vector<std::shared_ptr<ControlerPushButton>>;
   ctrl_btn_vec buttons;
   ctrl_btn_vec convolution_buttons;
 
   auto connect_to_action = [](QAction *act,
-                              std::shared_ptr<s21::ControlerPushButton> but,
+                              std::shared_ptr<ControlerPushButton> but,
                               ctrl_btn_vec &arr) {
     connect(act, &QAction::triggered, but.get(), &QPushButton::click);
     arr.push_back(but);
@@ -74,89 +74,73 @@ void MainWindow::SetupView() {
 
   connect_to_action(
       ui->actionNegative,
-      CreateControlerBtn(new s21::CommandNegative(controler_), "Negative"),
-      buttons);
-  connect_to_action(
-      ui->actionAverage_conversion,
-      CreateControlerBtn(new s21::CommandAverageConversion(controler_),
-                         "Average conversion"),
-      buttons);
+      CreateControlerBtn(new CommandNegative(controler_), "Negative"), buttons);
+  connect_to_action(ui->actionAverage_conversion,
+                    CreateControlerBtn(new CommandAverageConversion(controler_),
+                                       "Average conversion"),
+                    buttons);
   connect_to_action(
       ui->actionBy_brightness,
-      CreateControlerBtn(new s21::CommandConversionByBrightness(controler_),
+      CreateControlerBtn(new CommandConversionByBrightness(controler_),
                          "Conversion by brightness"),
       buttons);
   connect_to_action(
       ui->actionBy_desaturation,
-      CreateControlerBtn(new s21::CommandConversionByDesaturation(controler_),
+      CreateControlerBtn(new CommandConversionByDesaturation(controler_),
                          "Conversion by desaturation"),
       buttons);
-  connect_to_action(
-      ui->actionSober_combined,
-      CreateControlerBtn(new s21::CommandSobelFilterCombin(controler_),
-                         "Sobel filter combin"),
-      buttons);
+  connect_to_action(ui->actionSober_combined,
+                    CreateControlerBtn(new CommandSobelFilterCombin(controler_),
+                                       "Sobel filter combin"),
+                    buttons);
 
   connect_to_action(
       ui->actionEmbos,
-      CreateControlerBtn(new s21::CommandConvolution(controler_, "Embos"),
-                         "Embos"),
+      CreateControlerBtn(new CommandConvolution(controler_, "Embos"), "Embos"),
       convolution_buttons);
   connect_to_action(
       ui->actionSharpen,
-      CreateControlerBtn(new s21::CommandConvolution(controler_, "Sharpen"),
+      CreateControlerBtn(new CommandConvolution(controler_, "Sharpen"),
                          "Sharpen"),
       convolution_buttons);
   connect_to_action(
       ui->actionBox_blur,
-      CreateControlerBtn(new s21::CommandConvolution(controler_, "Box blur"),
+      CreateControlerBtn(new CommandConvolution(controler_, "Box blur"),
                          "Box blur"),
       convolution_buttons);
-  connect_to_action(ui->actionGaussian_blur,
-                    CreateControlerBtn(new s21::CommandConvolution(
-                                           controler_, "Gaussian blur"),
-                                       "Gaussian blur"),
-                    convolution_buttons);
-  connect_to_action(ui->actionLaplacian_filter,
-                    CreateControlerBtn(new s21::CommandConvolution(
-                                           controler_, "Laplacian filter"),
-                                       "Laplacian filter"),
-                    convolution_buttons);
+  connect_to_action(
+      ui->actionGaussian_blur,
+      CreateControlerBtn(new CommandConvolution(controler_, "Gaussian blur"),
+                         "Gaussian blur"),
+      convolution_buttons);
+  connect_to_action(
+      ui->actionLaplacian_filter,
+      CreateControlerBtn(new CommandConvolution(controler_, "Laplacian filter"),
+                         "Laplacian filter"),
+      convolution_buttons);
   connect_to_action(ui->actionSober_filter_left,
-                    CreateControlerBtn(new s21::CommandConvolution(
-                                           controler_, "Sobel filter left"),
-                                       "Sobel filter left"),
+                    CreateControlerBtn(
+                        new CommandConvolution(controler_, "Sobel filter left"),
+                        "Sobel filter left"),
                     convolution_buttons);
   connect_to_action(ui->actionSober_filter_right,
-                    CreateControlerBtn(new s21::CommandConvolution(
+                    CreateControlerBtn(new CommandConvolution(
                                            controler_, "Sobel filter right"),
                                        "Sobel filter right"),
                     convolution_buttons);
   auto reset_but1 =
-      CreateControlerBtn(new s21::CommandRestart(controler_), "Reset filters");
+      CreateControlerBtn(new CommandRestart(controler_), "Reset filters");
   auto reset_but2 =
-      CreateControlerBtn(new s21::CommandRestart(controler_), "Reset filters");
+      CreateControlerBtn(new CommandRestart(controler_), "Reset filters");
   auto reset_but3 =
-      CreateControlerBtn(new s21::CommandRestart(controler_), "Reset filters");
-
-  // auto color_container = std::make_shared<QColor>();
-  // auto color_command = std::make_unique<s21::CommandChannelSelection>(
-  //     controler_, color_container);
-  // auto color_but = std::make_shared<s21::ChannelSelectionButton>(
-  //     std::move(color_command), color_container, "Select color channel",
-  //     this);
-  // connect(color_but.get(), &s21::ChannelSelectionButton::Executed, this,
-  //         &MainWindow::UpdateImage);
-  // buttons.push_back(color_but);
-  // controler_btns_.push_back(color_but);
-
+      CreateControlerBtn(new CommandRestart(controler_), "Reset filters");
   auto save_button =
-      CreateControlerBtn(new s21::CommandSaveBMP(controler_), "Save image");
+      CreateControlerBtn(new CommandSaveBMP(controler_), "Save image");
   auto open_button =
-      CreateControlerBtn(new s21::CommandOpenBMP(controler_), "Open image");
-  connect(open_button.get(), &s21::ControlerPushButton::Executed, this,
+      CreateControlerBtn(new CommandOpenBMP(controler_), "Open image");
+  connect(open_button.get(), &ControlerPushButton::Executed, this,
           &MainWindow::RequestFileName);
-  connect(open_button.get(), &s21::ControlerPushButton::Executed, this,
+  connect(open_button.get(), &ControlerPushButton::Executed, this,
           &MainWindow::RequestImageSource);
   auto matrix_but = ui->Main_Buttons->itemAt(0)->widget();
   ui->Main_Buttons->removeWidget(matrix_but);
@@ -171,12 +155,12 @@ void MainWindow::SetupView() {
   ui->Controler_btns->addWidget(reset_but3.get());
 }
 
-std::shared_ptr<s21::ControlerPushButton> MainWindow::CreateControlerBtn(
-    s21::CommandBase *command, const QString &text) {
-  auto command_ptr = std::unique_ptr<s21::CommandBase>(command);
-  auto btn_ptr = std::make_shared<s21::ControlerPushButton>(
-      std::move(command_ptr), text, this);
-  connect(btn_ptr.get(), &s21::ControlerPushButton::Executed, this,
+std::shared_ptr<ControlerPushButton> MainWindow::CreateControlerBtn(
+    CommandBase *command, const QString &text) {
+  auto command_ptr = std::unique_ptr<CommandBase>(command);
+  auto btn_ptr =
+      std::make_shared<ControlerPushButton>(std::move(command_ptr), text, this);
+  connect(btn_ptr.get(), &ControlerPushButton::Executed, this,
           &MainWindow::UpdateImage);
   controler_btns_.push_back(btn_ptr);
   return btn_ptr;
@@ -206,3 +190,4 @@ void MainWindow::on_verticalSlider_Shade_valueChanged(int value) {
   controler_->SaturationChange(static_cast<float>(value) / 100, 1, 1);
   UpdateImage();
 }
+}  // namespace s21
