@@ -62,6 +62,11 @@ class CommandRestart : public CommandBase {
   using CommandBase::CommandBase;
   virtual void Execute() { controler_->Restart(); };
 };
+class CommandToning : public CommandBase {
+ public:
+  using CommandBase::CommandBase;
+  virtual void Execute() { controler_->Toning(); };
+};
 class CommandOpenBMP : public CommandBase {
  public:
   using CommandBase::CommandBase;

@@ -30,9 +30,10 @@ class Model {
   void Convolution(const std::string& convolution_name);
   void SobelFilterCombin();
   void ArbitraryMatrixMode(const kernel_mat& matrix);
-  void BrightnessChange(float brightness);
-  void ContrastChange(float contrast);
-  void SaturationChange(float shade, float lightness, float saturation);
+  void ChangeBrightness(float brightness);
+  void ChangeContrast(float contrast);
+  void ChangeSaturation(float shade, float lightness, float saturation);
+  void Toning();
   void Restart();
   std::string GetFilename() { return filename_; }
 

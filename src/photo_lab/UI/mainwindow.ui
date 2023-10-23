@@ -98,7 +98,7 @@
          <enum>QTabWidget::Triangular</enum>
         </property>
         <property name="currentIndex">
-         <number>4</number>
+         <number>1</number>
         </property>
         <property name="elideMode">
          <enum>Qt::ElideLeft</enum>
@@ -461,6 +461,7 @@
     <addaction name="menuConvolution"/>
     <addaction name="menuConversion"/>
     <addaction name="actionNegative"/>
+    <addaction name="actionToning"/>
     <addaction name="actionSober_combined"/>
    </widget>
    <addaction name="menuFilters"/>
@@ -567,6 +568,11 @@
    </property>
    <property name="shortcut">
     <string>S</string>
+   </property>
+  </action>
+  <action name="actionToning">
+   <property name="text">
+    <string>Toning</string>
    </property>
   </action>
  </widget>

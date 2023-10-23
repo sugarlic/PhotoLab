@@ -2,6 +2,8 @@
 
 #include <fstream>
 
+#include "godison/Vectors.h"
+namespace gV = godison::vectors;
 namespace s21 {
 void Model::ReadImg(const std::string &img_name) {
   std::ifstream file(img_name);
@@ -198,7 +200,7 @@ QImage Model::CreateQimage(BMP bmp_image) {
   return qImage;
 }
 
-void Model::BrightnessChange(float brightness) {
+void Model::ChangeBrightness(float brightness) {
   if (img_matrix_.empty()) return;
   filtered_matrix_ = img_matrix_;
   for (size_t i = 0; i < filtered_matrix_.size(); i++)
@@ -210,7 +212,7 @@ void Model::BrightnessChange(float brightness) {
     }
 }
 
-void Model::ContrastChange(float contrast) {
+void Model::ChangeContrast(float contrast) {
   if (img_matrix_.empty()) return;
   filtered_matrix_ = img_matrix_;
   for (size_t i = 0; i < filtered_matrix_.size(); i++)
@@ -224,7 +226,7 @@ void Model::ContrastChange(float contrast) {
     }
 }
 
-void Model::SaturationChange(float shade, float lightness, float saturation) {
+void Model::ChangeSaturation(float shade, float lightness, float saturation) {
   if (img_matrix_.empty()) return;
   filtered_matrix_ = img_matrix_;
   for (size_t i = 0; i < filtered_matrix_.size(); i++)
@@ -246,6 +248,35 @@ void Model::SaturationChange(float shade, float lightness, float saturation) {
       pixel.Green = std::clamp<float>(g * 255, 0, 255);
       pixel.Blue = std::clamp<float>(b * 255, 0, 255);
     }
+}
+
+void Model::Toning() {
+  const std::vector<gV::Vector3D> palette = {
+      {1, 34, 0},    {255, 0, 128}, {67, 89, 200},  {150, 20, 80},
+      {32, 178, 92}, {210, 45, 67}, {80, 160, 255}, {20, 200, 100},
+      {255, 128, 0}, {90, 60, 180}, {50, 255, 200}, {0, 150, 50},
+      {255, 255, 0}, {100, 0, 255}, {175, 75, 25},  {0, 0, 0}};
+  const auto height = img_matrix_.size();
+  for (size_t i = 0; i < height; i++) {
+    const auto width = img_matrix_[i].size();
+    for (size_t j = 0; j < width; j++) {
+      auto &img_px = img_matrix_[i][j];
+      auto &filter_px = filtered_matrix_[i][j];
+      auto source_px = gV::Vector3D(img_px.Red, img_px.Green, img_px.Blue);
+      gV::Vector3D closest{};
+      double minDistance = std::numeric_limits<double>::max();
+      for (const auto &color : palette) {
+        double distance = (source_px - color).Length();
+        if (distance < minDistance) {
+          minDistance = distance;
+          closest = color;
+        }
+      }
+      filter_px.Red = closest[0];
+      filter_px.Blue = closest[1];
+      filter_px.Green = closest[2];
+    }
+  }
 }
 
 void Model::Restart() { filtered_matrix_ = img_matrix_; }
@@ -290,11 +321,14 @@ void Model::HSLtoRGB(float h, float s, float l, float &r, float &g, float &b) {
 }
 
 float Model::HueToRGB(float p, float q, float t) {
+  constexpr auto c1 = 1 / 6.0;
+  constexpr auto c2 = 1 / 2.0;
+  constexpr auto c3 = 2 / 3.0;
   if (t < 0) t += 1;
   if (t > 1) t -= 1;
-  if (t < 1 / 6.0) return p + (q - p) * 6 * t;
-  if (t < 1 / 2.0) return q;
-  if (t < 2 / 3.0) return p + (q - p) * (2 / 3.0 - t) * 6;
+  if (t < c1) return p + (q - p) * 6 * t;
+  if (t < c2) return q;
+  if (t < c3) return p + (q - p) * (2 / 3.0 - t) * 6;
   return p;
 }
 }  // namespace s21

@@ -24,6 +24,7 @@ class Controler {
   void ContrastChange(float contrast);
   void SaturationChange(float shade, float lightness, float saturation);
   void Restart();
+  void Toning();
   std::string GetFilename() { return model_->GetFilename(); }
 
  private:

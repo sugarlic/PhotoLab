@@ -93,6 +93,9 @@ void MainWindow::SetupView() {
                     CreateControlerBtn(new CommandSobelFilterCombin(controler_),
                                        "Sobel filter combin"),
                     buttons);
+  connect_to_action(ui->actionToning,
+                    CreateControlerBtn(new CommandToning(controler_), "Toning"),
+                    buttons);
 
   connect_to_action(
       ui->actionEmbos,

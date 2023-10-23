@@ -32,18 +32,19 @@ void Controler::ArbitraryMatrixMode(
   model_->ArbitraryMatrixMode(matrix);
 }
 
-void s21::Controler::BrightnessChange(float brightness) {
-  model_->BrightnessChange(brightness);
+void Controler::BrightnessChange(float brightness) {
+  model_->ChangeBrightness(brightness);
 }
 
-void s21::Controler::ContrastChange(float contrast) {
-  model_->ContrastChange(contrast);
+void Controler::ContrastChange(float contrast) {
+  model_->ChangeContrast(contrast);
 }
 
-void s21::Controler::SaturationChange(float shade, float lightness,
-                                      float saturation) {
-  model_->SaturationChange(shade, lightness, saturation);
+void Controler::SaturationChange(float shade, float lightness,
+                                 float saturation) {
+  model_->ChangeSaturation(shade, lightness, saturation);
 }
 
-void s21::Controler::Restart() { model_->Restart(); }
+void Controler::Restart() { model_->Restart(); }
+void Controler::Toning() { model_->Toning(); }
 }  // namespace s21

@@ -6,7 +6,6 @@ file(GLOB_RECURSE ${LIB_NAME}_HEADERS
 add_library(${LIB_NAME} STATIC
     ${${LIB_NAME}_SRCS}
     ${${LIB_NAME}_HEADERS}
-
 )
-target_link_libraries(${LIB_NAME} PUBLIC EasyBMP Qt${QT_VERSION_MAJOR}::Widgets)
+target_link_libraries(${LIB_NAME} PUBLIC EasyBMP Qt${QT_VERSION_MAJOR}::Widgets godison)
 target_include_directories(${LIB_NAME} PUBLIC includes)

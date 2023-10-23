@@ -23,6 +23,13 @@ FetchContent_Declare(
 )
 set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 include_directories(${GTEST_INCLUDE_DIR})
+FetchContent_Declare(
+  godison
+  GIT_REPOSITORY https://github.com/DisonGo/godison.git
+  GIT_TAG        main
+)
+FetchContent_MakeAvailable(godison)
+
 find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets)
 
