@@ -226,34 +226,28 @@ void Model::ChangeContrast(float contrast) {
     }
 }
 
-void Model::SetShade(float shade) {
-  shade_ = shade;
-}
+void Model::SetShade(float shade) { shade_ = shade; }
 
-void Model::SetLightness(float lightness) {
-  lightness_ = lightness;
-}
+void Model::SetLightness(float lightness) { lightness_ = lightness; }
 
-void Model::SetSaturation(float saturation) {
-  saturation_ = saturation;
-}
+void Model::SetSaturation(float saturation) { saturation_ = saturation; }
 
 void Model::ChangeSaturation() {
   if (img_matrix_.empty()) return;
   filtered_matrix_ = img_matrix_;
+  // std::cout << "shade_:" << shade_ << "\n";
   for (size_t i = 0; i < filtered_matrix_.size(); i++)
     for (size_t j = 0; j < filtered_matrix_[0].size(); j++) {
       auto &pixel = filtered_matrix_[i][j];
-      float h, s, l;
+      float h{}, s{}, l{};
       float r = pixel.Red / 255.f;
       float g = pixel.Green / 255.f;
       float b = pixel.Blue / 255.f;
       RGBtoHSL(r, g, b, h, s, l);
-
+      // std::cout << h << "\n";
       h = std::clamp<float>(h * shade_, 0, 360);
       s = std::clamp<float>(s * saturation_, 0, 1);
       l = std::clamp<float>(l * lightness_, 0, 1);
-
       HSLtoRGB(h, s, l, r, g, b);
 
       pixel.Red = std::clamp<float>(r * 255, 0, 255);
@@ -276,11 +270,11 @@ void Model::Toning() {
       auto &filter_px = filtered_matrix_[i][j];
       auto source_px = gV::Vector3D(img_px.Red, img_px.Green, img_px.Blue);
       gV::Vector3D closest{};
-      double minDistance = std::numeric_limits<double>::max();
+      double min_distance = std::numeric_limits<double>::max();
       for (const auto &color : palette) {
         double distance = (source_px - color).Length();
-        if (distance < minDistance) {
-          minDistance = distance;
+        if (distance < min_distance) {
+          min_distance = distance;
           closest = color;
         }
       }
@@ -294,18 +288,18 @@ void Model::Toning() {
 void Model::Restart() { filtered_matrix_ = img_matrix_; }
 
 void Model::RGBtoHSL(float r, float g, float b, float &h, float &s, float &l) {
-  const float &maxVal = std::max({r, g, b});
-  const float &minVal = std::min({r, g, b});
+  const float maxVal = std::max({r, g, b});
+  const float minVal = std::min({r, g, b});
 
   float delta = maxVal - minVal;
 
   if (delta == 0) {
     h = 0;
-  } else if (&maxVal == &r) {
+  } else if (maxVal == r) {
     h = 60 * std::fmod((g - b) / delta, 6);
-  } else if (&maxVal == &g) {
+  } else if (maxVal == g) {
     h = 60 * ((b - r) / delta + 2);
-  } else if (&maxVal == &b) {
+  } else if (maxVal == b) {
     h = 60 * ((r - g) / delta + 4);
   }
 
