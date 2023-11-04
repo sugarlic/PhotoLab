@@ -7,6 +7,7 @@
 #include <QProxyStyle>
 #include <QStyleOptionTab>
 #include <filesystem>
+// contrast -100 100 // Bright 1 199
 namespace s21 {
 MainWindow::MainWindow(std::shared_ptr<Controler> controler, QWidget *parent)
     : QMainWindow(parent),
@@ -53,6 +54,38 @@ void MainWindow::SelectColorChannel() {
   if (but == ui->ChannelGreen_B) channel = Model::kGreen;
   if (but == ui->ChannelBlue_B) channel = Model::kBlue;
   controler_->ChannelSelection(channel);
+}
+
+void MainWindow::CreateSliders() {
+  // HSL
+  auto slider =
+      CreateControlerSlider(new CommandSetSaturation(controler_)).get();
+  slider->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Expanding);
+  slider->setValue(50);
+  ui->HSL_Grid->addWidget(slider, 1, 0);
+  slider = CreateControlerSlider(new CommandSetLightness(controler_)).get();
+  slider->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Expanding);
+  slider->setValue(50);
+  ui->HSL_Grid->addWidget(slider, 1, 1);
+  slider = CreateControlerSlider(new CommandSetShade(controler_)).get();
+  slider->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Expanding);
+  slider->setValue(50);
+  ui->HSL_Grid->addWidget(slider, 1, 2);
+  // Brightness / Contrast
+  slider = CreateControlerSlider(new CommandChangeBrightness(controler_)).get();
+  slider->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Expanding);
+  slider->setSingleStep(1);
+  slider->setMaximum(199);
+  slider->setMinimum(1);
+  slider->setValue(100);
+  ui->BS_LT->addWidget(slider, 1, 0);
+
+  slider = CreateControlerSlider(new CommandChangeContrast(controler_)).get();
+  slider->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Expanding);
+  slider->setSingleStep(1);
+  slider->setMaximum(100);
+  slider->setMinimum(-100);
+  ui->BS_LT->addWidget(slider, 1, 1);
 }
 
 void MainWindow::SetupView() {
@@ -145,16 +178,6 @@ void MainWindow::SetupView() {
           &MainWindow::RequestFileName);
   connect(open_button.get(), &ControlerPushButton::Executed, this,
           &MainWindow::RequestImageSource);
-  auto slider =
-      CreateControlerSlider(new CommandSetSaturation(controler_)).get();
-  slider->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Expanding);
-  ui->HSL_Grid->addWidget(slider, 1, 0);
-  slider = CreateControlerSlider(new CommandSetLightness(controler_)).get();
-  slider->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Expanding);
-  ui->HSL_Grid->addWidget(slider, 1, 1);
-  slider = CreateControlerSlider(new CommandSetShade(controler_)).get();
-  slider->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Expanding);
-  ui->HSL_Grid->addWidget(slider, 1, 2);
 
   auto matrix_but = ui->Main_Buttons->itemAt(0)->widget();
   ui->Main_Buttons->removeWidget(matrix_but);
@@ -167,6 +190,7 @@ void MainWindow::SetupView() {
     ui->Convolution_btns->addWidget(but.get());
   ui->Convolution_btns->addWidget(reset_but2.get());
   ui->Controler_btns->addWidget(reset_but3.get());
+  CreateSliders();
 }
 
 std::shared_ptr<ControlerPushButton> MainWindow::CreateControlerBtn(

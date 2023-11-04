@@ -11,7 +11,7 @@ class ControlerSlider : public QSlider {
  public:
   ControlerSlider(std::unique_ptr<CommandWithValueBase<float>> command,
                   float delimeter = 100, QWidget* parent = nullptr)
-      : QSlider(parent), command_(std::move(command)), delimeter_(delimeter) {
+      : QSlider(parent), delimeter_(delimeter), command_(std::move(command)) {
     connect(this, &QSlider::valueChanged, this, &ControlerSlider::Execute);
   }
  signals:

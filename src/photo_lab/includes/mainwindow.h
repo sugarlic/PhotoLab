@@ -32,6 +32,7 @@ class MainWindow : public QMainWindow {
   void RequestFileName();
   void RequestImageSource();
   void SelectColorChannel();
+  void CreateSliders();
   void on_pushButton_MM_clicked();
 
  private:
